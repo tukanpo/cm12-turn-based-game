@@ -15,10 +15,15 @@ namespace App.Scenes.Game
             StartCoroutine(CreateStage(onFinish));
         }
 
+        public Tile GetTile(GridCoord coord)
+        {
+            return _tiles[coord.X, coord.Y];
+        }
+
         IEnumerator CreateStage(Action onFinish)
         {
-            const int sizeX = 10;
-            const int sizeY = 10;
+            const int sizeX = 9;
+            const int sizeY = 9;
             
             _tiles = new Tile[sizeX, sizeY];
 
