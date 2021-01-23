@@ -48,10 +48,10 @@ namespace App.Scenes.Game
         }
 
         /// <summary>
-        /// 隣接するフロア座標を取得する
+        /// 隣接するグリッド座標を取得する
         /// </summary>
         /// <param name="direction">方向</param>
-        /// <returns>フロア座標</returns>
+        /// <returns>グリッド座標</returns>
         public GridCoord GetAdjacentCoord(Constants.CardinalDirection direction)
         {
             var x = X;

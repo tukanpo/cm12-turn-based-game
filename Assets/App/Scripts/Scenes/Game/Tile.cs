@@ -11,7 +11,11 @@ namespace App.Scenes.Game
         
         public static Tile Spawn(Tile prefab, Transform parent, GridCoord coord)
         {
-            var tile = Instantiate(prefab, coord.ToVector3(), prefab.transform.rotation);
+            // 決め打ち
+            const float meshSize = 1.2f;
+
+            var position = new Vector3(coord.X * meshSize, 0, coord.Y * meshSize);
+            var tile = Instantiate(prefab, position, prefab.transform.rotation);
             tile.transform.parent = parent;
             tile.Coord = coord;
             
