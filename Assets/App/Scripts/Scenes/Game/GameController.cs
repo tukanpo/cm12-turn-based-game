@@ -56,11 +56,14 @@ namespace App.Scenes.Game
         class PlayerTurnState : StateMachine<GameController>.State
         {
             bool _inputEnabled = true;
-            
+
+            public override void OnEnter()
+            {
+                _inputEnabled = true;
+            }
+
             public override void OnUpdate()
             {
-                // TODO: プレイヤーユニットにコマンドを送る
-
                 if (Input.GetKey(KeyCode.UpArrow))
                 {
                     Context.StartCoroutine(MovePlayer(Constants.CardinalDirection.N));
@@ -98,12 +101,41 @@ namespace App.Scenes.Game
                 var tile = Stage.Instance.GetTile(targetCoord);
                 yield return Context._unitsManager.Player.Move(tile);
 
-                _inputEnabled = true;
+                StateMachine.Transit<EnemyTurnState>();
             }
         }
 
         class EnemyTurnState : StateMachine<GameController>.State
         {
+            public override void OnEnter()
+            {
+                Context.StartCoroutine(MoveEnemies());
+            }
+
+            IEnumerator MoveEnemies()
+            {
+                foreach (var enemy in Context._unitsManager.Enemies)
+                {
+                    yield return MoveEnemy(enemy);
+                }
+            }
+
+            IEnumerator MoveEnemy(Unit enemy)
+            {
+                // // プレイヤーに近づく
+                // var a = enemy.Coord;
+                // var b = Context._unitsManager.Player.Coord;
+                //
+                // // 上下左右どれかをチェック
+                //
+                //
+                // var tile = Stage.Instance.GetTile(targetCoord);
+                // yield return Context._unitsManager.Player.Move(tile);
+
+                StateMachine.Transit<PlayerTurnState>();
+
+                yield break;
+            }
         }
         
         #endregion

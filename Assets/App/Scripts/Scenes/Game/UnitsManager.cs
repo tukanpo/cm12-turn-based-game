@@ -10,6 +10,7 @@ namespace App.Scenes.Game
         [SerializeField] Unit _enemyPrefab;
 
         public Unit Player { get; private set; }
+
         public List<Unit> Enemies { get; private set; } = new List<Unit>();
 
         public void CreatePlayer(GridCoord coord, Constants.CardinalDirection direction)
