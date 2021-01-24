@@ -10,11 +10,12 @@ namespace App.Scenes.Game
 
         public Constants.CardinalDirection Direction { get; protected set; }
 
-        public static Unit Spawn(Unit prefab, Transform parent, Tile tile)
+        public static Unit Spawn(Unit prefab, Transform parent, Tile tile, Constants.CardinalDirection direction)
         {
             var unit = Instantiate(prefab, tile.transform.position, prefab.transform.rotation);
             unit.transform.parent = parent;
             unit.Coord = tile.Coord;
+            unit.SetDirection(direction);
             
             return unit;
         }
@@ -55,7 +56,7 @@ namespace App.Scenes.Game
         IEnumerator SmoothMove(Vector3 destination, float speed, float waitAfter)
         {
             transform.LookAt(destination);
-        
+
             while (Vector3.Distance(transform.position, destination) > float.Epsilon)
             {
                 transform.position = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);

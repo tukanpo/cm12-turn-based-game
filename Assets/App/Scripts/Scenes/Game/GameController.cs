@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using App.Util;
 using Cinemachine;
@@ -38,10 +39,12 @@ namespace App.Scenes.Game
             {
                 Context._stage.CreateStageAsync(() =>
                 {
-                    Context._unitsManager.CreatePlayer(new GridCoord(4, 4));
-                    var playerTransform = Context._unitsManager.Player.transform;
-                    Context._vcam1.Follow = playerTransform;
-                    Context._vcam1.LookAt = playerTransform;
+                    Context._unitsManager.CreatePlayer(new GridCoord(4, 4), Constants.CardinalDirection.S);
+                    Context._unitsManager.SetPlayerCamera(Context._vcam1);
+
+                    Context._unitsManager.CreateEnemy(
+                        new GridCoord(2, 2),
+                        EnumUtil.Random<Constants.CardinalDirection>());
                     
                     Context._board.gameObject.SetActive(false);
                     
