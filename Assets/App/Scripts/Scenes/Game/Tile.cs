@@ -1,3 +1,4 @@
+using App.Scenes.Game.Structure;
 using UnityEngine;
 
 namespace App.Scenes.Game

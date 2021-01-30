@@ -352,7 +352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e989b692072e24088ad3aaeabe55cda1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _board: {fileID: 1060548498}
+  _fullScreenBoard: {fileID: 1060548498}
   _stage: {fileID: 322295520}
   _unitsManager: {fileID: 322295521}
   _vcam1: {fileID: 1285803804}
@@ -582,7 +582,7 @@ GameObject:
   - component: {fileID: 1060548499}
   - component: {fileID: 1060548498}
   m_Layer: 5
-  m_Name: Image
+  m_Name: FullScreenBoard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

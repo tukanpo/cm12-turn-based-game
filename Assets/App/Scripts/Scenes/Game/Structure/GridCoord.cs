@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace App.Scenes.Game
+namespace App.Scenes.Game.Structure
 {
     public readonly struct GridCoord
     {
@@ -40,6 +40,11 @@ namespace App.Scenes.Game
             {
                 return (X * 397) ^ Y;
             }
+        }
+
+        public Vector2 ToVector2()
+        {
+            return new Vector2(X, Y);
         }
         
         public Vector3 ToVector3()

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using App.Scenes.Game.Structure;
 using UnityEngine;
 
 namespace App.Scenes.Game
@@ -9,6 +10,9 @@ namespace App.Scenes.Game
         [SerializeField] Tile _tilePrefab;
 
         Tile[,] _tiles;
+
+        // とりあえず
+        public Tile[,] Tiles => _tiles;
         
         static Stage _instance;
 

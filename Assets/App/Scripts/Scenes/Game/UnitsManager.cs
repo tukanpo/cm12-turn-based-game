@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using App.Scenes.Game.Structure;
 using Cinemachine;
 using UnityEngine;
 

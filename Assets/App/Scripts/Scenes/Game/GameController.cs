@@ -1,5 +1,6 @@
-using System;
 using System.Collections;
+using System.Collections.Generic;
+using App.Scenes.Game.Structure;
 using App.Util;
 using Cinemachine;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace App.Scenes.Game
 {
     public class GameController : MonoBehaviour
     {
-        [SerializeField] Image _board;
+        [SerializeField] Image _fullScreenBoard;
         [SerializeField] Stage _stage;
         [SerializeField] UnitsManager _unitsManager;
         [SerializeField] CinemachineVirtualCamera _vcam1;
@@ -46,7 +47,7 @@ namespace App.Scenes.Game
                         new GridCoord(2, 2),
                         EnumUtil.Random<Constants.CardinalDirection>());
                     
-                    Context._board.gameObject.SetActive(false);
+                    Context._fullScreenBoard.gameObject.SetActive(false);
                     
                     StateMachine.Transit<PlayerTurnState>();
                 });
@@ -122,19 +123,36 @@ namespace App.Scenes.Game
 
             IEnumerator MoveEnemy(Unit enemy)
             {
-                // // プレイヤーに近づく
-                // var a = enemy.Coord;
-                // var b = Context._unitsManager.Player.Coord;
-                //
-                // // 上下左右どれかをチェック
-                //
-                //
-                // var tile = Stage.Instance.GetTile(targetCoord);
-                // yield return Context._unitsManager.Player.Move(tile);
+                
+                var nodes = new AStarSearchGrid.Node[Stage.Instance.Tiles.GetLength(1), Stage.Instance.Tiles.GetLength(0)];
+                for (var y = 0; y < nodes.GetLength(0); y++)
+                {
+                    for (var x = 0; x < nodes.GetLength(1); x++)
+                    {
+                        nodes[y, x] = new AStarSearchGrid.Node(x, y);
+                    }
+                }
 
+                var start = nodes[enemy.Coord.Y, enemy.Coord.X];
+                var goal = nodes[Context._unitsManager.Player.Coord.Y, Context._unitsManager.Player.Coord.X];
+
+                var aStar = new AStarSearchGrid();
+                if (!aStar.Search(nodes, start, goal))
+                {
+                    Debug.Log("経路探索 失敗");
+                    StateMachine.Transit<PlayerTurnState>();
+                    yield break;
+                }
+
+                var path = new List<AStarSearchGrid.Node>();
+                goal.GetPath(path);
+
+                foreach (var n in path)
+                {
+                    Debug.Log($"{n.X}, {n.Y}");
+                }
+                
                 StateMachine.Transit<PlayerTurnState>();
-
-                yield break;
             }
         }
         
