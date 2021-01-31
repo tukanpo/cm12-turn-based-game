@@ -11,12 +11,13 @@ namespace App.Scenes.Game
 
         public Constants.CardinalDirection Direction { get; protected set; }
 
-        public static Unit Spawn(Unit prefab, Transform parent, Tile tile, Constants.CardinalDirection direction)
+        public static Unit Spawn(Unit prefab, Transform parent, GridCell cell, Constants.CardinalDirection direction)
         {
-            var unit = Instantiate(prefab, tile.transform.position, prefab.transform.rotation);
+            var unit = Instantiate(prefab, cell.Tile.transform.position, prefab.transform.rotation);
             unit.transform.parent = parent;
-            unit.Coord = tile.Coord;
+            unit.Coord = cell.Tile.Coord;
             unit.SetDirection(direction);
+            cell.Unit = unit;
             
             return unit;
         }
@@ -24,34 +25,40 @@ namespace App.Scenes.Game
         public void SetDirection(Constants.CardinalDirection direction)
         {
             var position = transform.position;
+            Vector3 lookAtTransform;
             switch (direction)
             {
                 case Constants.CardinalDirection.N:
-                    transform.LookAt(new Vector3(position.x, position.y, position.z + 1));
+                    lookAtTransform = new Vector3(position.x, position.y, position.z + 1);
                     break;
                 case Constants.CardinalDirection.S:
-                    transform.LookAt(new Vector3(position.x, position.y, position.z - 1));
+                    lookAtTransform = new Vector3(position.x, position.y, position.z - 1);
                     break;
                 case Constants.CardinalDirection.E:
-                    transform.LookAt(new Vector3(position.x - 1, position.y, position.z));
+                    lookAtTransform = new Vector3(position.x - 1, position.y, position.z);
                     break;
                 case Constants.CardinalDirection.W:
-                    transform.LookAt(new Vector3(position.x + 1, position.y, position.z));
+                    lookAtTransform = new Vector3(position.x + 1, position.y, position.z);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
             }
-
+            
+            transform.LookAt(lookAtTransform);
             Direction = direction;
         }
         
         // TODO: ここでコマンドを受け取る
 
-        public IEnumerator Move(Tile tile)
+        public IEnumerator Move(GridCell destinationCell)
         {
-            yield return SmoothMove(tile.transform.position, 3.5f, 0.1f);
+            yield return SmoothMove(destinationCell.Tile.transform.position, 3.5f, 0.1f);
             
-            Coord = tile.Coord;
+            // 移動前のセルから参照を外して移動先セルに参照をセットする
+            Stage.Instance.GetCell(Coord).Unit = null;
+            destinationCell.Unit = this;
+
+            Coord = destinationCell.Coord;
         }
 
         IEnumerator SmoothMove(Vector3 destination, float speed, float waitAfter)

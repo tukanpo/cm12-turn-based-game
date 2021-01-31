@@ -20,11 +20,22 @@ namespace App.Scenes.Game
             tile.transform.parent = parent;
             tile.Coord = coord;
             
-            // とりあえず市松模様にする
-            var color = (coord.X + coord.Y) % 2 == 0 ? CheckerColor1 : CheckerColor2;
-            tile.GetComponent<Renderer>().material.color = color;
+            // とりあえずマテリアルの色を変えとく
+            tile.SetColor(false);
             
             return tile;
+        }
+
+        public void SetColor(bool isStrongColor)
+        {
+            // 市松模様にする
+            var color = (Coord.X + Coord.Y) % 2 == 0 ? CheckerColor1 : CheckerColor2;
+            if (isStrongColor)
+            {
+                color += new Color(0, 0.5f, 0.6f);
+            }
+
+            GetComponent<Renderer>().material.color = color;
         }
     }
 }

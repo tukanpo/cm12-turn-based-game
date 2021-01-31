@@ -2,14 +2,14 @@ namespace App.Scenes.Game.Structure
 {
     public class Grid
     {
-        Cell[,] _cells;
+        GridCell[,] _cells;
 
         public Grid(int sizeX, int sizeY)
         {
-            _cells = new Cell[sizeY, sizeX];
+            _cells = new GridCell[sizeY, sizeX];
         }
 
-        public Cell GetCell(int x, int y)
+        public GridCell GetCell(int x, int y)
         {
             return _cells[y, x];
         }

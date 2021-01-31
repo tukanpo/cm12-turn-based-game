@@ -16,12 +16,12 @@ namespace App.Scenes.Game
 
         public void CreatePlayer(GridCoord coord, Constants.CardinalDirection direction)
         {
-            Player = Unit.Spawn(_playerPrefab, transform, Stage.Instance.GetTile(coord), direction);
+            Player = Unit.Spawn(_playerPrefab, transform, Stage.Instance.GetCell(coord), direction);
         }
 
         public void CreateEnemy(GridCoord coord, Constants.CardinalDirection direction)
         {
-            var enemy = Unit.Spawn(_enemyPrefab, transform, Stage.Instance.GetTile(coord), direction);
+            var enemy = Unit.Spawn(_enemyPrefab, transform, Stage.Instance.GetCell(coord), direction);
             Enemies.Add(enemy);
         }
 

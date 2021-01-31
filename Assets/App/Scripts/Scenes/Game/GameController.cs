@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using App.Scenes.Game.Structure;
 using App.Util;
 using Cinemachine;
@@ -45,6 +44,9 @@ namespace App.Scenes.Game
 
                     Context._unitsManager.CreateEnemy(
                         new GridCoord(2, 2),
+                        EnumUtil.Random<Constants.CardinalDirection>());
+                    Context._unitsManager.CreateEnemy(
+                        new GridCoord(5, 6),
                         EnumUtil.Random<Constants.CardinalDirection>());
                     
                     Context._fullScreenBoard.gameObject.SetActive(false);
@@ -92,15 +94,15 @@ namespace App.Scenes.Game
                 if (!_inputEnabled) yield break;
 
                 var targetCoord = Context._unitsManager.Player.Coord.GetAdjacentCoord(direction);
-                if (Stage.Instance.IsTileExists(targetCoord))
+                if (Stage.Instance.IsCoordOutOfRange(targetCoord))
                 {
                     yield break;
                 }
  
                 _inputEnabled = false;
                 
-                var tile = Stage.Instance.GetTile(targetCoord);
-                yield return Context._unitsManager.Player.Move(tile);
+                var cell = Stage.Instance.GetCell(targetCoord);
+                yield return Context._unitsManager.Player.Move(cell);
 
                 StateMachine.Transit<EnemyTurnState>();
             }
@@ -123,39 +125,28 @@ namespace App.Scenes.Game
 
             IEnumerator MoveEnemy(Unit enemy)
             {
-                
-                var nodes = new AStarSearchGrid.Node[Stage.Instance.Tiles.GetLength(1), Stage.Instance.Tiles.GetLength(0)];
-                for (var y = 0; y < nodes.GetLength(0); y++)
+                var result = Stage.Instance.FindPath(enemy.Coord, Context._unitsManager.Player.Coord);
+                if (result == null)
                 {
-                    for (var x = 0; x < nodes.GetLength(1); x++)
-                    {
-                        nodes[y, x] = new AStarSearchGrid.Node(x, y);
-                    }
-                }
-
-                var start = nodes[enemy.Coord.Y, enemy.Coord.X];
-                var goal = nodes[Context._unitsManager.Player.Coord.Y, Context._unitsManager.Player.Coord.X];
-
-                var aStar = new AStarSearchGrid();
-                if (!aStar.Search(nodes, start, goal))
-                {
-                    Debug.Log("経路探索 失敗");
+                    Debug.Log("Path not found!");
                     StateMachine.Transit<PlayerTurnState>();
                     yield break;
                 }
 
-                var path = new List<AStarSearchGrid.Node>();
-                goal.GetPath(path);
-
-                foreach (var n in path)
+                var cell = Stage.Instance.GetCell(new GridCoord(result.FirstStepNode.X, result.FirstStepNode.Y));
+                if (cell.Coord == Context._unitsManager.Player.Coord)
                 {
-                    Debug.Log($"{n.X}, {n.Y}");
+                    // TODO: プレイヤー（探索ゴール）なら攻撃
+                }
+                else
+                {
+                    yield return enemy.Move(cell);
                 }
                 
                 StateMachine.Transit<PlayerTurnState>();
             }
         }
-        
+
         #endregion
     }
 }
