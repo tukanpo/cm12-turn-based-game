@@ -46,7 +46,7 @@ namespace App.Scenes.Game
                         new GridCoord(2, 2),
                         EnumUtil.Random<Constants.CardinalDirection>());
                     Context._unitsManager.CreateEnemy(
-                        new GridCoord(5, 6),
+                        new GridCoord(1, 2),
                         EnumUtil.Random<Constants.CardinalDirection>());
                     
                     Context._fullScreenBoard.gameObject.SetActive(false);
@@ -102,7 +102,15 @@ namespace App.Scenes.Game
                 _inputEnabled = false;
                 
                 var cell = Stage.Instance.GetCell(targetCoord);
-                yield return Context._unitsManager.Player.Move(cell);
+                if (cell.Unit != null)
+                {
+                    // TODO: 攻撃
+                    yield return new WaitForSeconds(0.1f);
+                }
+                else
+                {
+                    yield return Context._unitsManager.Player.Move(cell);
+                }
 
                 StateMachine.Transit<EnemyTurnState>();
             }
@@ -121,6 +129,8 @@ namespace App.Scenes.Game
                 {
                     yield return MoveEnemy(enemy);
                 }
+
+                StateMachine.Transit<PlayerTurnState>();
             }
 
             IEnumerator MoveEnemy(Unit enemy)
@@ -142,8 +152,6 @@ namespace App.Scenes.Game
                 {
                     yield return enemy.Move(cell);
                 }
-                
-                StateMachine.Transit<PlayerTurnState>();
             }
         }
 

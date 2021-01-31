@@ -115,7 +115,7 @@ namespace App.Util
         readonly List<Node> _openNodes = new List<Node>();
         
         // NOTE: キャッシュを考えると外部から渡せる方が良いかもしれない
-        //       使い回すかどうかは使用者に委ねる
+        //       使い回すかどうかは使用者に委ねる？
         readonly Result _result = new Result();
 
         public Result FindPath(Node[,] nodes, Node start, Node goal)
@@ -160,15 +160,13 @@ namespace App.Util
 
         void OpenNode(int x, int y, Node parent, Node goal)
         {
-            // ノード存在チェック
+            // ノード範囲チェック
             if (x < 0 || x > _nodes.GetLength(1) - 1 || y < 0 || y > _nodes.GetLength(0) - 1)
             {
                 return;
             }
             
             var target = _nodes[y, x];
-
-            // オープン済なら何もしない
             if (target.IsOpened)
             {
                 return;
@@ -177,10 +175,10 @@ namespace App.Util
             // 移動可否判定（ゴールはオープンする必要があるので判定から除外）
             if (target != goal && !target.NodeContent.IsMovable())
             {
-                Debug.Log("移動不可");
+                target.IsOpened = true;
                 return;
             }
-            
+
             // 次の Node への最低移動コストは常に１とする
             var additionalCost = 1 + target.NodeContent.GetAdditionalCost();
             target.Parent = parent;

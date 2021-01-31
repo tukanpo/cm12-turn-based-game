@@ -52,11 +52,11 @@ namespace App.Scenes.Game
 
         public IEnumerator Move(GridCell destinationCell)
         {
-            yield return SmoothMove(destinationCell.Tile.transform.position, 3.5f, 0.1f);
-            
             // 移動前のセルから参照を外して移動先セルに参照をセットする
             Stage.Instance.GetCell(Coord).Unit = null;
             destinationCell.Unit = this;
+            
+            yield return SmoothMove(destinationCell.Tile.transform.position, 3.5f, 0.1f);
 
             Coord = destinationCell.Coord;
         }
