@@ -48,6 +48,9 @@ namespace App.Scenes.Game
                     Context._unitsManager.CreateEnemy(
                         new GridCoord(1, 2),
                         EnumUtil.Random<Constants.CardinalDirection>());
+                    Context._unitsManager.CreateEnemy(
+                        new GridCoord(7, 7),
+                        EnumUtil.Random<Constants.CardinalDirection>());
                     
                     Context._fullScreenBoard.gameObject.SetActive(false);
                     
