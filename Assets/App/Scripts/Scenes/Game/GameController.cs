@@ -39,6 +39,8 @@ namespace App.Scenes.Game
             {
                 Context._stage.CreateStageAsync(() =>
                 {
+                    Context._fullScreenBoard.gameObject.SetActive(true);
+                    
                     Context._unitsManager.CreatePlayer(new GridCoord(4, 4), Constants.CardinalDirection.S);
                     Context._unitsManager.SetPlayerCamera(Context._vcam1);
 
@@ -51,6 +53,10 @@ namespace App.Scenes.Game
                     Context._unitsManager.CreateEnemy(
                         new GridCoord(7, 7),
                         EnumUtil.Random<Constants.CardinalDirection>());
+                    
+                    Context._unitsManager.CreateWall(new GridCoord(3, 2));
+                    Context._unitsManager.CreateWall(new GridCoord(5, 4));
+                    Context._unitsManager.CreateWall(new GridCoord(3, 3));
                     
                     Context._fullScreenBoard.gameObject.SetActive(false);
                     

@@ -368,7 +368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d7f0da1750c4170a9bb28cf97bd3dec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tilePrefab: {fileID: 605292972218495501, guid: 8dab87073e3cf41348f41dfedd18503b, type: 3}
+  _tilePrefab: {fileID: 3829966496149291026, guid: df48de21f180b44cf9aad8ea28628dc9, type: 3}
 --- !u!114 &322295521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -383,6 +383,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerPrefab: {fileID: 6138808974544290287, guid: 531c12fc9c66d452d97ac568b7db6f9c, type: 3}
   _enemyPrefab: {fileID: 6138808974544290287, guid: c428cd9e01c92496fa22ed48a732fb00, type: 3}
+  _wallPrefab: {fileID: 6615026269078877378, guid: b80f0ef271198417f8c36a320da200f6, type: 3}
 --- !u!1 &535492980
 GameObject:
   m_ObjectHideFlags: 3
@@ -587,7 +588,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1060548497
 RectTransform:
   m_ObjectHideFlags: 0

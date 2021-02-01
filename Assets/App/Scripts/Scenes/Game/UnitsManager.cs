@@ -9,10 +9,13 @@ namespace App.Scenes.Game
     {
         [SerializeField] Unit _playerPrefab;
         [SerializeField] Unit _enemyPrefab;
+        [SerializeField] Unit _wallPrefab;
 
         public Unit Player { get; private set; }
 
-        public List<Unit> Enemies { get; private set; } = new List<Unit>();
+        public List<Unit> Enemies { get; } = new List<Unit>();
+
+        public List<Unit> StaticObjects { get; } = new List<Unit>();
 
         public void CreatePlayer(GridCoord coord, Constants.CardinalDirection direction)
         {
@@ -21,8 +24,14 @@ namespace App.Scenes.Game
 
         public void CreateEnemy(GridCoord coord, Constants.CardinalDirection direction)
         {
-            var enemy = Unit.Spawn(_enemyPrefab, transform, Stage.Instance.GetCell(coord), direction);
-            Enemies.Add(enemy);
+            var unit = Unit.Spawn(_enemyPrefab, transform, Stage.Instance.GetCell(coord), direction);
+            Enemies.Add(unit);
+        }
+
+        public void CreateWall(GridCoord coord)
+        {
+            var unit = Unit.Spawn(_wallPrefab, transform, Stage.Instance.GetCell(coord), Constants.CardinalDirection.N);
+            StaticObjects.Add(unit);
         }
 
         public void SetPlayerCamera(CinemachineVirtualCamera vcam)
