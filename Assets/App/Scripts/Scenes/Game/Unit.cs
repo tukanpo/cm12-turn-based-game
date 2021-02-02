@@ -7,16 +7,28 @@ namespace App.Scenes.Game
 {
     public class Unit : MonoBehaviour
     {
+        public int Id { get; private set; }
+        
+        public Constants.UnitType UnitType { get; private set; }
+        
         public GridCoord Coord { get; private set; }
 
         public Constants.CardinalDirection Direction { get; protected set; }
 
-        public static Unit Spawn(Unit prefab, Transform parent, GridCell cell, Constants.CardinalDirection direction)
+        public static Unit Spawn(
+            int unitId,
+            Constants.UnitType unitType,
+            Unit prefab,
+            Transform parent,
+            GridCell cell,
+            Constants.CardinalDirection direction)
         {
             var unit = Instantiate(prefab, cell.Tile.transform.position, prefab.transform.rotation);
             unit.transform.parent = parent;
             unit.Coord = cell.Tile.Coord;
             unit.SetDirection(direction);
+            unit.Id = unitId;
+            unit.UnitType = unitType;
             cell.Unit = unit;
             
             return unit;
@@ -53,12 +65,29 @@ namespace App.Scenes.Game
         public IEnumerator Move(GridCell destinationCell)
         {
             // 移動前のセルから参照を外して移動先セルに参照をセットする
-            Stage.Instance.GetCell(Coord).Unit = null;
+            StageManager.Instance.GetCell(Coord).Unit = null;
             destinationCell.Unit = this;
             
             yield return SmoothMove(destinationCell.Tile.transform.position, 3.5f, 0.1f);
 
             Coord = destinationCell.Coord;
+        }
+
+        public IEnumerator Attack(Unit target)
+        {
+            yield return target.Defence();
+        }
+
+        public IEnumerator Defence()
+        {
+            // or Damaged
+            yield return Die();
+        }
+
+        public IEnumerator Die()
+        {
+            UnitsManager.Instance.DestroyUnit(this);
+            yield break;
         }
 
         IEnumerator SmoothMove(Vector3 destination, float speed, float waitAfter)

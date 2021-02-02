@@ -353,7 +353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fullScreenBoard: {fileID: 1060548498}
-  _stage: {fileID: 322295520}
+  _stageManager: {fileID: 322295520}
   _unitsManager: {fileID: 322295521}
   _vcam1: {fileID: 1285803804}
 --- !u!114 &322295520

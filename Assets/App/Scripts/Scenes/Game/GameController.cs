@@ -10,7 +10,7 @@ namespace App.Scenes.Game
     public class GameController : MonoBehaviour
     {
         [SerializeField] Image _fullScreenBoard;
-        [SerializeField] Stage _stage;
+        [SerializeField] StageManager _stageManager;
         [SerializeField] UnitsManager _unitsManager;
         [SerializeField] CinemachineVirtualCamera _vcam1;
 
@@ -37,7 +37,9 @@ namespace App.Scenes.Game
         {
             public override void OnEnter()
             {
-                Context._stage.CreateStageAsync(() =>
+                Context._unitsManager.Initialize();
+                
+                Context._stageManager.CreateStageAsync(() =>
                 {
                     Context._fullScreenBoard.gameObject.SetActive(true);
                     
@@ -103,18 +105,17 @@ namespace App.Scenes.Game
                 if (!_inputEnabled) yield break;
 
                 var targetCoord = Context._unitsManager.Player.Coord.GetAdjacentCoord(direction);
-                if (Stage.Instance.IsCoordOutOfRange(targetCoord))
+                if (!StageManager.Instance.IsMovableOrAttackableCell(targetCoord))
                 {
                     yield break;
                 }
  
                 _inputEnabled = false;
                 
-                var cell = Stage.Instance.GetCell(targetCoord);
-                if (cell.Unit != null)
+                var cell = StageManager.Instance.GetCell(targetCoord);
+                if (cell.Unit != null && cell.Unit.UnitType == Constants.UnitType.Enemy)
                 {
-                    // TODO: 攻撃
-                    yield return new WaitForSeconds(0.1f);
+                    yield return Context._unitsManager.Player.Attack(cell.Unit);
                 }
                 else
                 {
@@ -136,6 +137,11 @@ namespace App.Scenes.Game
             {
                 foreach (var enemy in Context._unitsManager.Enemies)
                 {
+                    if (enemy == null)
+                    {
+                        continue;
+                    }
+                    
                     yield return MoveEnemy(enemy);
                 }
 
@@ -144,7 +150,7 @@ namespace App.Scenes.Game
 
             IEnumerator MoveEnemy(Unit enemy)
             {
-                var result = Stage.Instance.FindPath(enemy.Coord, Context._unitsManager.Player.Coord);
+                var result = StageManager.Instance.FindPath(enemy.Coord, Context._unitsManager.Player.Coord);
                 if (result == null)
                 {
                     Debug.Log("Path not found!");
@@ -152,7 +158,7 @@ namespace App.Scenes.Game
                     yield break;
                 }
 
-                var cell = Stage.Instance.GetCell(new GridCoord(result.FirstStepNode.X, result.FirstStepNode.Y));
+                var cell = StageManager.Instance.GetCell(new GridCoord(result.FirstStepNode.X, result.FirstStepNode.Y));
                 if (cell.Coord == Context._unitsManager.Player.Coord)
                 {
                     // TODO: プレイヤー（探索ゴール）なら攻撃
