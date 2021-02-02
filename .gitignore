@@ -5,6 +5,9 @@
 [Bb]uilds/
 Assets/AssetStoreTools*
 
+# WebGL publish directory
+!/docs/Build
+
 # Visual Studio cache directory
 .vs/
 .vscode/
