@@ -75,12 +75,15 @@ namespace App.Scenes.Game
 
         public IEnumerator Attack(Unit target)
         {
+            transform.LookAt(target.transform);
+            
             yield return target.Defence();
+            
+            yield return new WaitForSeconds(0.3f);
         }
 
         public IEnumerator Defence()
         {
-            // or Damaged
             yield return Die();
         }
 
