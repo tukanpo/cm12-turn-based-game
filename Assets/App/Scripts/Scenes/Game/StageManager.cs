@@ -14,6 +14,20 @@ namespace App.Scenes.Game
         AStarGrid _aStarGrid;
         AStarGrid.Node[,] _aStarNodes;
 
+        public void Initialize()
+        {
+            if (_cells != null)
+            {
+                for (var y = 0; y < _cells.GetLength(0); y++)
+                {
+                    for (var x = 0; x < _cells.GetLength(1); x++)
+                    {
+                        Destroy(_cells[y, x].Tile.gameObject);
+                    }
+                }
+            }
+        }
+        
         public void CreateStageAsync(Action onFinish)
         {
             StartCoroutine(CreateStage(onFinish));

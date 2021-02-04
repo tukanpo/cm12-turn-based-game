@@ -65,7 +65,7 @@ namespace App.Scenes.Game
             Direction = direction;
         }
         
-        // TODO: ここでコマンドを受け取る
+        // TODO: ここでコマンドを受け取る。ここで実行されるのはアニメーションのみにする（？）
 
         public IEnumerator Move(GridCell destinationCell)
         {

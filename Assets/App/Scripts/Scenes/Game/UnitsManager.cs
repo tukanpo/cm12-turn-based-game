@@ -18,17 +18,37 @@ namespace App.Scenes.Game
 
         public List<Unit> StaticObjects { get; } = new List<Unit>();
 
-        int _unitId;
+        int _unitIdCount;
         
         public void Initialize()
         {
-            _unitId = 0;
+            _unitIdCount = 0;
+
+            if (!ReferenceEquals(Player, null))
+            {
+                Destroy(Player.gameObject);
+                Player = null;
+            }
+
+            foreach (var t in Enemies)
+            {
+                Destroy(t.gameObject);
+            }
+
+            Enemies.Clear();
+
+            foreach (var t in StaticObjects)
+            {
+                Destroy(t.gameObject);
+            }
+
+            StaticObjects.Clear();
         }
 
         public void CreatePlayer(GridCell cell, Constants.CardinalDirection direction)
         {
             Player = Unit.Spawn(
-                _unitId++,
+                _unitIdCount++,
                 Constants.UnitType.Player,
                 _playerPrefab, transform, cell, direction);
             Player.UnitStatus.Health = 1;
@@ -39,7 +59,7 @@ namespace App.Scenes.Game
         public void CreateEnemy(GridCell cell, Constants.CardinalDirection direction)
         {
             var unit = Unit.Spawn(
-                _unitId++,
+                _unitIdCount++,
                 Constants.UnitType.Enemy,
                 _enemyPrefab, transform, cell, direction);
             unit.UnitStatus.Health = 1;
@@ -51,7 +71,7 @@ namespace App.Scenes.Game
         public void CreateWall(GridCell cell)
         {
             var unit = Unit.Spawn(
-                _unitId++,
+                _unitIdCount++,
                 Constants.UnitType.StaticObject,
                 _wallPrefab, transform, cell, Constants.CardinalDirection.N);
             StaticObjects.Add(unit);
@@ -59,22 +79,17 @@ namespace App.Scenes.Game
 
         void OnUnitDied(Unit unit)
         {
-            unit.Cell.Unit = null;
-            Destroy(unit.gameObject);
-
-            int index;
             switch (unit.UnitType)
             {
                 case Constants.UnitType.Player:
-                    Player = null;
                     break;
                 case Constants.UnitType.Enemy:
-                    index = Enemies.IndexOf(unit);
+                    unit.Cell.Unit = null;
+                    Destroy(unit.gameObject);
+                    var index = Enemies.IndexOf(unit);
                     Enemies[index] = null;
                     break;
                 case Constants.UnitType.StaticObject:
-                    index = StaticObjects.IndexOf(unit);
-                    StaticObjects[index] = null;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

@@ -39,6 +39,7 @@ namespace App.Scenes.Game
             public override void OnEnter()
             {
                 Context._unitsManager.Initialize();
+                Context._stageManager.Initialize();
                 
                 Context._stageManager.CreateStageAsync(() =>
                 {
@@ -151,6 +152,12 @@ namespace App.Scenes.Game
                     }
                     
                     yield return MoveEnemy(enemy);
+                    
+                    if (Context._unitsManager.Player.UnitStatus.Health <= 0)
+                    {
+                        StateMachine.Transit<GameOverState>();
+                        yield break;
+                    }
                 }
 
                 StateMachine.Transit<PlayerTurnState>();
@@ -177,22 +184,23 @@ namespace App.Scenes.Game
                     yield return enemy.Move(cell);
                 }
             }
-
-            // TODO: ここにどうやって通知？
-            public void OnPlayerDied()
-            {
-                StateMachine.Transit<GameOverState>();
-            }
         }
 
         class GameOverState : StateMachine<GameController>.State
         {
             public override void OnEnter()
             {
-                // UI 表示
+                Debug.Log("GameOverState.OnEnter()");
+
+                Context.StartCoroutine(GameOverSequence());
+            }
+
+            IEnumerator GameOverSequence()
+            {
+                yield return new WaitForSeconds(2f);
+                yield return new WaitUntil(() => Input.GetKey(KeyCode.Space));
                 
-                // ボタン押下でリスタート
-                Context.StartGame();
+                StateMachine.Transit<StageStartState>();
             }
         }
 
