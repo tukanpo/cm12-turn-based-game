@@ -79,21 +79,15 @@ namespace App.Scenes.Game
 
         void OnUnitDied(Unit unit)
         {
-            switch (unit.UnitType)
+            if (unit.UnitType != Constants.UnitType.Enemy)
             {
-                case Constants.UnitType.Player:
-                    break;
-                case Constants.UnitType.Enemy:
-                    unit.Cell.Unit = null;
-                    Destroy(unit.gameObject);
-                    var index = Enemies.IndexOf(unit);
-                    Enemies[index] = null;
-                    break;
-                case Constants.UnitType.StaticObject:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                return;
             }
+
+            unit.Cell.Unit = null;
+            Destroy(unit.gameObject);
+            var index = Enemies.IndexOf(unit);
+            Enemies[index] = null;
         }
 
         public void SetPlayerCamera(CinemachineVirtualCamera vcam)

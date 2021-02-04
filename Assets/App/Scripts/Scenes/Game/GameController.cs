@@ -108,10 +108,6 @@ namespace App.Scenes.Game
             {
                 if (!_inputEnabled) yield break;
 
-                
-                // TODO: ★ Unit 系は UnitManager 経由して操作するように変更！！！！！
-
-                
                 var targetCoord = Context._unitsManager.Player.Cell.Coord.GetAdjacentCoord(direction);
                 if (!Context._stageManager.IsMovableOrAttackableCell(targetCoord))
                 {
@@ -190,8 +186,6 @@ namespace App.Scenes.Game
         {
             public override void OnEnter()
             {
-                Debug.Log("GameOverState.OnEnter()");
-
                 Context.StartCoroutine(GameOverSequence());
             }
 

@@ -79,7 +79,7 @@ namespace App.Scenes.Game
 
                 yield return null;
             }
-            
+
             // 経路探索用ノード配列生成
             _aStarGrid = new AStarGrid();
             _aStarNodes = new AStarGrid.Node[_cells.GetLength(1), _cells.GetLength(0)];
