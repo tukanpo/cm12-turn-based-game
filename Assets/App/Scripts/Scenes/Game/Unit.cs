@@ -11,9 +11,13 @@ namespace App.Scenes.Game
         
         public Constants.UnitType UnitType { get; private set; }
         
-        public GridCoord Coord { get; private set; }
-
+        public UnitStatus UnitStatus { get; private set; }
+        
+        public GridCell Cell { get; private set; }
+        
         public Constants.CardinalDirection Direction { get; protected set; }
+        
+        public event Action<Unit> OnUnitDied;
 
         public static Unit Spawn(
             int unitId,
@@ -25,10 +29,11 @@ namespace App.Scenes.Game
         {
             var unit = Instantiate(prefab, cell.Tile.transform.position, prefab.transform.rotation);
             unit.transform.parent = parent;
-            unit.Coord = cell.Tile.Coord;
+            unit.Cell = cell;
             unit.SetDirection(direction);
             unit.Id = unitId;
             unit.UnitType = unitType;
+            unit.UnitStatus = new UnitStatus();
             cell.Unit = unit;
             
             return unit;
@@ -65,19 +70,29 @@ namespace App.Scenes.Game
         public IEnumerator Move(GridCell destinationCell)
         {
             // 移動前のセルから参照を外して移動先セルに参照をセットする
-            StageManager.Instance.GetCell(Coord).Unit = null;
+            Cell.Unit = null;
+            Cell = null;
             destinationCell.Unit = this;
-            
-            yield return SmoothMove(destinationCell.Tile.transform.position, 3.5f, 0.1f);
 
-            Coord = destinationCell.Coord;
+            // やっつけ
+            var speed = UnitType == Constants.UnitType.Player ? 3.5f : 6f;
+            
+            yield return SmoothMove(destinationCell.Tile.transform.position, speed, 0.1f);
+
+            Cell = destinationCell;
         }
 
         public IEnumerator Attack(Unit target)
         {
             transform.LookAt(target.transform);
             
+            // TODO: ★直接呼びたくない！ 非同期にしたい
             yield return target.Defence();
+
+            if (target.UnitStatus.Health <= 0)
+            {
+                OnUnitDied?.Invoke(target);
+            }
             
             yield return new WaitForSeconds(0.3f);
         }
@@ -89,7 +104,7 @@ namespace App.Scenes.Game
 
         public IEnumerator Die()
         {
-            UnitsManager.Instance.DestroyUnit(this);
+            UnitStatus.Health = 0;
             yield break;
         }
 

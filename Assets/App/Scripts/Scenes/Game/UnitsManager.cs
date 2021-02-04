@@ -18,56 +18,50 @@ namespace App.Scenes.Game
 
         public List<Unit> StaticObjects { get; } = new List<Unit>();
 
-        static UnitsManager _instance;
-        
         int _unitId;
-        
-        public static UnitsManager Instance
-        {
-            get
-            {
-                if (ReferenceEquals(_instance, null))
-                {
-                    throw new Exception();
-                }
-
-                return _instance;
-            }
-        }
         
         public void Initialize()
         {
             _unitId = 0;
         }
 
-        public void CreatePlayer(GridCoord coord, Constants.CardinalDirection direction)
+        public void CreatePlayer(GridCell cell, Constants.CardinalDirection direction)
         {
             Player = Unit.Spawn(
                 _unitId++,
                 Constants.UnitType.Player,
-                _playerPrefab, transform, StageManager.Instance.GetCell(coord), direction);
+                _playerPrefab, transform, cell, direction);
+            Player.UnitStatus.Health = 1;
+            Player.UnitStatus.ActionPoint = 1;
+            Player.OnUnitDied += OnUnitDied;
         }
 
-        public void CreateEnemy(GridCoord coord, Constants.CardinalDirection direction)
+        public void CreateEnemy(GridCell cell, Constants.CardinalDirection direction)
         {
             var unit = Unit.Spawn(
                 _unitId++,
                 Constants.UnitType.Enemy,
-                _enemyPrefab, transform, StageManager.Instance.GetCell(coord), direction);
+                _enemyPrefab, transform, cell, direction);
+            unit.UnitStatus.Health = 1;
+            unit.UnitStatus.ActionPoint = 1;
+            unit.OnUnitDied += OnUnitDied;
             Enemies.Add(unit);
         }
 
-        public void CreateWall(GridCoord coord)
+        public void CreateWall(GridCell cell)
         {
             var unit = Unit.Spawn(
                 _unitId++,
                 Constants.UnitType.StaticObject,
-                _wallPrefab, transform, StageManager.Instance.GetCell(coord), Constants.CardinalDirection.N);
+                _wallPrefab, transform, cell, Constants.CardinalDirection.N);
             StaticObjects.Add(unit);
         }
 
-        public void DestroyUnit(Unit unit)
+        void OnUnitDied(Unit unit)
         {
+            unit.Cell.Unit = null;
+            Destroy(unit.gameObject);
+
             int index;
             switch (unit.UnitType)
             {
@@ -85,9 +79,6 @@ namespace App.Scenes.Game
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            
-            StageManager.Instance.GetCell(unit.Coord).Unit = null;
-            Destroy(unit.gameObject);
         }
 
         public void SetPlayerCamera(CinemachineVirtualCamera vcam)
@@ -96,9 +87,5 @@ namespace App.Scenes.Game
             vcam.Follow = playerTransform;
             vcam.LookAt = playerTransform;
         }
-        
-        void Awake() => _instance = this;
-
-        void OnDestroy() => _instance = null;
     }
 }

@@ -22,6 +22,7 @@ namespace App.Scenes.Game
             _sm.AddState<StageStartState>();
             _sm.AddState<PlayerTurnState>();
             _sm.AddState<EnemyTurnState>();
+            _sm.AddState<GameOverState>();
         }
 
         void Update() => _sm.UpdateState();
@@ -43,22 +44,24 @@ namespace App.Scenes.Game
                 {
                     Context._fullScreenBoard.gameObject.SetActive(true);
                     
-                    Context._unitsManager.CreatePlayer(new GridCoord(4, 4), Constants.CardinalDirection.S);
+                    Context._unitsManager.CreatePlayer(
+                        Context._stageManager.GetCell(new GridCoord(4, 4)),
+                        Constants.CardinalDirection.S);
                     Context._unitsManager.SetPlayerCamera(Context._vcam1);
 
                     Context._unitsManager.CreateEnemy(
-                        new GridCoord(2, 2),
+                        Context._stageManager.GetCell(new GridCoord(2, 2)),
                         EnumUtil.Random<Constants.CardinalDirection>());
                     Context._unitsManager.CreateEnemy(
-                        new GridCoord(1, 2),
+                        Context._stageManager.GetCell(new GridCoord(1, 2)),
                         EnumUtil.Random<Constants.CardinalDirection>());
                     Context._unitsManager.CreateEnemy(
-                        new GridCoord(7, 7),
+                        Context._stageManager.GetCell(new GridCoord(7, 7)),
                         EnumUtil.Random<Constants.CardinalDirection>());
                     
-                    Context._unitsManager.CreateWall(new GridCoord(3, 2));
-                    Context._unitsManager.CreateWall(new GridCoord(5, 4));
-                    Context._unitsManager.CreateWall(new GridCoord(3, 3));
+                    Context._unitsManager.CreateWall(Context._stageManager.GetCell(new GridCoord(3, 2)));
+                    Context._unitsManager.CreateWall(Context._stageManager.GetCell(new GridCoord(5, 4)));
+                    Context._unitsManager.CreateWall(Context._stageManager.GetCell(new GridCoord(3, 3)));
                     
                     Context._fullScreenBoard.gameObject.SetActive(false);
                     
@@ -104,17 +107,22 @@ namespace App.Scenes.Game
             {
                 if (!_inputEnabled) yield break;
 
-                var targetCoord = Context._unitsManager.Player.Coord.GetAdjacentCoord(direction);
-                if (!StageManager.Instance.IsMovableOrAttackableCell(targetCoord))
+                
+                // TODO: ★ Unit 系は UnitManager 経由して操作するように変更！！！！！
+
+                
+                var targetCoord = Context._unitsManager.Player.Cell.Coord.GetAdjacentCoord(direction);
+                if (!Context._stageManager.IsMovableOrAttackableCell(targetCoord))
                 {
                     yield break;
                 }
  
                 _inputEnabled = false;
                 
-                var cell = StageManager.Instance.GetCell(targetCoord);
+                var cell = Context._stageManager.GetCell(targetCoord);
                 if (cell.Unit != null && cell.Unit.UnitType == Constants.UnitType.Enemy)
                 {
+                    Debug.Log($"Player Attack! enemyId:{cell.Unit.Id}");
                     yield return Context._unitsManager.Player.Attack(cell.Unit);
                 }
                 else
@@ -150,7 +158,7 @@ namespace App.Scenes.Game
 
             IEnumerator MoveEnemy(Unit enemy)
             {
-                var result = StageManager.Instance.FindPath(enemy.Coord, Context._unitsManager.Player.Coord);
+                var result = Context._stageManager.FindPath(enemy.Cell.Coord, Context._unitsManager.Player.Cell.Coord);
                 if (result == null)
                 {
                     Debug.Log("Path not found!");
@@ -158,15 +166,33 @@ namespace App.Scenes.Game
                     yield break;
                 }
 
-                var cell = StageManager.Instance.GetCell(new GridCoord(result.FirstStepNode.X, result.FirstStepNode.Y));
-                if (cell.Coord == Context._unitsManager.Player.Coord)
+                var cell = Context._stageManager.GetCell(new GridCoord(result.FirstStepNode.X, result.FirstStepNode.Y));
+                if (cell.Coord == Context._unitsManager.Player.Cell.Coord)
                 {
-                    // TODO: プレイヤー（探索ゴール）なら攻撃
+                    Debug.Log($"Enemy Attack! enemyId:{enemy.Id}");
+                    yield return enemy.Attack(Context._unitsManager.Player);
                 }
                 else
                 {
                     yield return enemy.Move(cell);
                 }
+            }
+
+            // TODO: ここにどうやって通知？
+            public void OnPlayerDied()
+            {
+                StateMachine.Transit<GameOverState>();
+            }
+        }
+
+        class GameOverState : StateMachine<GameController>.State
+        {
+            public override void OnEnter()
+            {
+                // UI 表示
+                
+                // ボタン押下でリスタート
+                Context.StartGame();
             }
         }
 

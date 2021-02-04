@@ -10,24 +10,9 @@ namespace App.Scenes.Game
     {
         [SerializeField] Tile _tilePrefab;
 
-        static StageManager _instance;
-
         GridCell[,] _cells;
         AStarGrid _aStarGrid;
         AStarGrid.Node[,] _aStarNodes;
-
-        public static StageManager Instance
-        {
-            get
-            {
-                if (ReferenceEquals(_instance, null))
-                {
-                    throw new Exception();
-                }
-
-                return _instance;
-            }
-        }
 
         public void CreateStageAsync(Action onFinish)
         {
@@ -61,10 +46,6 @@ namespace App.Scenes.Game
             var goal = _aStarNodes[goalCoord.Y, goalCoord.X];
             return _aStarGrid.FindPath(_aStarNodes, start, goal);
         }
-
-        void Awake() => _instance = this;
-
-        void OnDestroy() => _instance = null;
 
         IEnumerator CreateStage(Action onFinish)
         {
