@@ -76,10 +76,13 @@ namespace App.Scenes.Game
             Cell = null;
             destinationCell.Unit = this;
 
-            // やっつけ
-            var speed = UnitType == Constants.UnitType.Player ? 3.5f : 6f;
+            // yield return Turn(destinationCell.Tile.transform, 5f);
             
-            yield return SmoothMove(destinationCell.Tile.transform.position, speed, 0.1f);
+            var speed = UnitType == Constants.UnitType.Player ? 3.5f : 6f;
+            yield return MoveOverSpeed(destinationCell.Tile.transform.position, speed, 0.1f);
+
+            // var seconds = UnitType == Constants.UnitType.Player ? 1f : 0.5f;
+            // yield return MoveOverSeconds(destinationCell.Tile.transform.position, seconds);
 
             Cell = destinationCell;
         }
@@ -111,9 +114,9 @@ namespace App.Scenes.Game
             UnitStatus.Health = 0;
         }
 
-        IEnumerator SmoothMove(Vector3 destination, float speed, float waitAfter)
+        IEnumerator MoveOverSpeed(Vector3 destination, float speed, float waitAfter)
         {
-            transform.LookAt(destination);
+            // transform.LookAt(destination);
 
             while (Vector3.Distance(transform.position, destination) > float.Epsilon)
             {
@@ -123,6 +126,52 @@ namespace App.Scenes.Game
         
             yield return new WaitForSeconds(waitAfter);
         }
+        
+        IEnumerator MoveOverSeconds(Vector3 destination, float seconds)
+        {
+            float elapsedTime = 0;
+            while (elapsedTime < seconds)
+            {
+                var position = transform.position;
+                var time = Vector3.Distance(position, destination) / (seconds - elapsedTime) * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(position, destination, time);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+        }
+
+        // IEnumerator Turn(Transform target, float seconds)
+        // {
+        //     var relativePos = target.position - transform.position;
+        //     relativePos.y = 0;
+        //
+        //     var lookRotation = Quaternion.LookRotation(relativePos);
+        //
+        //     float elapsedTime = 0;
+        //     while (elapsedTime < seconds)
+        //     {
+        //         transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, elapsedTime / seconds);
+        //         elapsedTime += Time.deltaTime;
+        //         yield return null;
+        //     }
+        //
+        //     Debug.Log("Turn End");
+        // }
+        //
+        // IEnumerator Turn2(Transform target, float speed)
+        // {
+        //     var diff = target.position - transform.position;
+        //     var angle = Vector3.Angle(target.forward, diff);
+        //     diff.y = 0;
+        //
+        //     var lookRotation = Quaternion.LookRotation(diff);
+        //
+        //     while (Math.Abs(angle - Vector3.Angle(transform.forward, diff)) > float.Epsilon)
+        //     {
+        //         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, speed * Time.deltaTime);
+        //         yield return null;
+        //     }
+        // }
 
         IEnumerator Blink(float duration)
         {
