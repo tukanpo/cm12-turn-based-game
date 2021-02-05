@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using App.Scenes.Game.Structure;
 using Cinemachine;
 using UnityEngine;
@@ -30,14 +31,14 @@ namespace App.Scenes.Game
                 Player = null;
             }
 
-            foreach (var t in Enemies)
+            foreach (var t in Enemies.Where(t => !ReferenceEquals(t, null)))
             {
                 Destroy(t.gameObject);
             }
 
             Enemies.Clear();
 
-            foreach (var t in StaticObjects)
+            foreach (var t in StaticObjects.Where(t => !ReferenceEquals(t, null)))
             {
                 Destroy(t.gameObject);
             }

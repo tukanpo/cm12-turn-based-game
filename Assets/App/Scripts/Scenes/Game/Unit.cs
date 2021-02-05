@@ -7,6 +7,8 @@ namespace App.Scenes.Game
 {
     public class Unit : MonoBehaviour
     {
+        [SerializeField] GameObject _body;
+        
         public int Id { get; private set; }
         
         public Constants.UnitType UnitType { get; private set; }
@@ -104,8 +106,9 @@ namespace App.Scenes.Game
 
         public IEnumerator Die()
         {
+            yield return Blink(0.3f);
+           
             UnitStatus.Health = 0;
-            yield break;
         }
 
         IEnumerator SmoothMove(Vector3 destination, float speed, float waitAfter)
@@ -119,6 +122,23 @@ namespace App.Scenes.Game
             }
         
             yield return new WaitForSeconds(waitAfter);
+        }
+
+        IEnumerator Blink(float duration)
+        {
+            var mat = _body.GetComponent<Renderer>().material;
+            var originalColor = mat.color;
+            
+            var limit = Time.time + duration;
+            while (Time.time < limit)
+            {
+                mat.color = new Color(1f, 1f, 0f);
+                yield return new WaitForSeconds(0.1f);
+                mat.color = originalColor;
+                yield return new WaitForSeconds(0.1f);
+            }
+            
+            mat.color = originalColor;
         }
     }
 }

@@ -117,7 +117,7 @@ namespace App.Scenes.Game
                 _inputEnabled = false;
                 
                 var cell = Context._stageManager.GetCell(targetCoord);
-                if (cell.Unit != null && cell.Unit.UnitType == Constants.UnitType.Enemy)
+                if (!ReferenceEquals(cell.Unit, null) && cell.Unit.UnitType == Constants.UnitType.Enemy)
                 {
                     Debug.Log($"Player Attack! enemyId:{cell.Unit.Id}");
                     yield return Context._unitsManager.Player.Attack(cell.Unit);
@@ -142,7 +142,7 @@ namespace App.Scenes.Game
             {
                 foreach (var enemy in Context._unitsManager.Enemies)
                 {
-                    if (enemy == null)
+                    if (ReferenceEquals(enemy, null))
                     {
                         continue;
                     }

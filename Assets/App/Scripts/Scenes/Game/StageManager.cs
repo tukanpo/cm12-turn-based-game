@@ -46,7 +46,7 @@ namespace App.Scenes.Game
             }
             
             var unit = _cells[coord.X, coord.Y].Unit;
-            return !(unit != null && unit.UnitType == Constants.UnitType.StaticObject);
+            return !(!ReferenceEquals(unit, null) && unit.UnitType == Constants.UnitType.StaticObject);
         }
         
         public GridCell GetCell(GridCoord coord)
