@@ -79,11 +79,13 @@ namespace App.Scenes.Game
             // yield return Turn(destinationCell.Tile.transform, 5f);
             
             var speed = UnitType == Constants.UnitType.Player ? 3.5f : 6f;
-            yield return MoveOverSpeed(destinationCell.Tile.transform.position, speed, 0.1f);
+            yield return MoveOverSpeed(destinationCell.Tile.transform.position, speed);
 
             // var seconds = UnitType == Constants.UnitType.Player ? 1f : 0.5f;
             // yield return MoveOverSeconds(destinationCell.Tile.transform.position, seconds);
 
+            yield return new WaitForSeconds(0.1f);
+            
             Cell = destinationCell;
         }
 
@@ -104,29 +106,31 @@ namespace App.Scenes.Game
 
         public IEnumerator Defence()
         {
-            yield return Die();
+            UnitStatus.Health -= 1;
+            yield return Blink(0.3f);
+
+            if (UnitStatus.Health <= 0)
+            {
+                yield return Die();
+            }
         }
 
         public IEnumerator Die()
         {
-            yield return Blink(0.3f);
-           
-            UnitStatus.Health = 0;
+            yield break;
         }
 
-        IEnumerator MoveOverSpeed(Vector3 destination, float speed, float waitAfter)
+        IEnumerator MoveOverSpeed(Vector3 destination, float speed)
         {
-            // transform.LookAt(destination);
+            transform.LookAt(destination);
 
             while (Vector3.Distance(transform.position, destination) > float.Epsilon)
             {
                 transform.position = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
                 yield return null;
             }
-        
-            yield return new WaitForSeconds(waitAfter);
         }
-        
+
         IEnumerator MoveOverSeconds(Vector3 destination, float seconds)
         {
             float elapsedTime = 0;
@@ -181,6 +185,7 @@ namespace App.Scenes.Game
             var limit = Time.time + duration;
             while (Time.time < limit)
             {
+                // ちょっと duration をオーバーする場合があるけど…
                 mat.color = new Color(1f, 1f, 0f);
                 yield return new WaitForSeconds(0.1f);
                 mat.color = originalColor;

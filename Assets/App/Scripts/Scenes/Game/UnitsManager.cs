@@ -52,7 +52,7 @@ namespace App.Scenes.Game
                 _unitIdCount++,
                 Constants.UnitType.Player,
                 _playerPrefab, transform, cell, direction);
-            Player.UnitStatus.Health = 1;
+            Player.UnitStatus.Health = 3;
             Player.UnitStatus.ActionPoint = 1;
             Player.OnUnitDied += OnUnitDied;
         }
@@ -63,7 +63,7 @@ namespace App.Scenes.Game
                 _unitIdCount++,
                 Constants.UnitType.Enemy,
                 _enemyPrefab, transform, cell, direction);
-            unit.UnitStatus.Health = 1;
+            unit.UnitStatus.Health = 2;
             unit.UnitStatus.ActionPoint = 1;
             unit.OnUnitDied += OnUnitDied;
             Enemies.Add(unit);
