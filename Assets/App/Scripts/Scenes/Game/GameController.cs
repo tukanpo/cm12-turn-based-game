@@ -9,11 +9,14 @@ namespace App.Scenes.Game
 {
     public class GameController : MonoBehaviour
     {
-        [SerializeField] Image _fullScreenBoard;
         [SerializeField] StageManager _stageManager;
         [SerializeField] UnitsManager _unitsManager;
         [SerializeField] CinemachineVirtualCamera _vcam1;
 
+        [SerializeField] Image _fullScreenBoard;
+        [SerializeField] GameObject _gameOverPanel;
+        [SerializeField] Button _retryButton;
+        
         StateMachine<GameController> _sm;
 
         void Awake()
@@ -40,11 +43,12 @@ namespace App.Scenes.Game
             {
                 Context._unitsManager.Initialize();
                 Context._stageManager.Initialize();
-                
+
+                Context._fullScreenBoard.gameObject.SetActive(true);
+                Context._gameOverPanel.gameObject.SetActive(false);
+
                 Context._stageManager.CreateStageAsync(() =>
                 {
-                    Context._fullScreenBoard.gameObject.SetActive(true);
-                    
                     Context._unitsManager.CreatePlayer(
                         Context._stageManager.GetCell(new GridCoord(4, 4)),
                         Constants.CardinalDirection.S);
@@ -82,23 +86,23 @@ namespace App.Scenes.Game
 
             public override void OnUpdate()
             {
-                if (Input.GetKey(KeyCode.UpArrow))
+                if (Input.GetKey(KeyCode.W))
                 {
                     Context.StartCoroutine(MovePlayer(Constants.CardinalDirection.N));
                 }
-                else if (Input.GetKey(KeyCode.DownArrow))
+                else if (Input.GetKey(KeyCode.S))
                 {
                     Context.StartCoroutine(MovePlayer(Constants.CardinalDirection.S));
                 }
-                else if (Input.GetKey(KeyCode.LeftArrow))
+                else if (Input.GetKey(KeyCode.A))
                 {
                     Context.StartCoroutine(MovePlayer(Constants.CardinalDirection.E));
                 }
-                else if (Input.GetKey(KeyCode.RightArrow))
+                else if (Input.GetKey(KeyCode.D))
                 {
                     Context.StartCoroutine(MovePlayer(Constants.CardinalDirection.W));
                 }
-                else if (Input.GetKeyDown(KeyCode.Return))
+                else if (Input.GetKeyDown(KeyCode.Space))
                 {
                     StateMachine.Transit<EnemyTurnState>();
                 }
@@ -186,14 +190,35 @@ namespace App.Scenes.Game
         {
             public override void OnEnter()
             {
+                Context._retryButton.onClick.AddListener(OnClickRetryButton);
+
                 Context.StartCoroutine(GameOverSequence());
+            }
+
+            public override void OnExit()
+            {
+                Context._retryButton.onClick.RemoveListener(OnClickRetryButton);
             }
 
             IEnumerator GameOverSequence()
             {
-                yield return new WaitForSeconds(2f);
+                yield return new WaitForSeconds(0.5f);
+
+                Context._fullScreenBoard.gameObject.SetActive(true);
+                Context._gameOverPanel.gameObject.SetActive(true);
+
+                yield return new WaitForSeconds(0.2f);
                 yield return new WaitUntil(() => Input.GetKey(KeyCode.Space));
-                
+                Retry();
+            }
+
+            void OnClickRetryButton()
+            {
+                Retry();
+            }
+
+            void Retry()
+            {
                 StateMachine.Transit<StageStartState>();
             }
         }
