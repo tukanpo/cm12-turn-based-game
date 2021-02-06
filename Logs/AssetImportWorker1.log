@@ -1701,3 +1701,96 @@ System memory in use after: 122.5 MB.
 Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 2154.
 Total: 2.356668 ms (FindLiveObjects: 0.307166 ms CreateObjectMapping: 0.059729 ms MarkObjects: 1.937860 ms  DeleteObjects: 0.050823 ms)
 
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.000678 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.30 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Warning: Annotation not found!
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at /Users/bokken/buildslave/unity/build/Runtime/Export/Scripting/StackTrace.cs:37)
+UnityEditor.ProBuilder.EditorUtility:SetGizmoIconEnabled (System.Type,bool) (at Library/PackageCache/com.unity.probuilder@4.4.0/Editor/EditorCore/EditorUtility.cs:593)
+UnityEditor.ProBuilder.HierarchyListener:.cctor () (at Library/PackageCache/com.unity.probuilder@4.4.0/Editor/EditorCore/HierarchyListener.cs:21)
+System.Runtime.CompilerServices.RuntimeHelpers:RunClassConstructor (System.RuntimeTypeHandle)
+UnityEditor.EditorAssemblies:ProcessInitializeOnLoadAttributes (System.Type[]) (at /Users/bokken/buildslave/unity/build/Editor/Mono/EditorAssemblies.cs:114)
+
+[Library/PackageCache/com.unity.probuilder@4.4.0/Editor/EditorCore/EditorUtility.cs line 593]
+
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.162 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.31 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1588 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 154.0 MB.
+System memory in use after: 154.1 MB.
+
+Unloading 7 unused Assets to reduce memory usage. Loaded Objects now: 2156.
+Total: 2.328878 ms (FindLiveObjects: 0.203067 ms CreateObjectMapping: 0.053063 ms MarkObjects: 2.008047 ms  DeleteObjects: 0.063198 ms)
+
+========================================================================
+Received Import Request.
+  Time since last request: 58083.189204 seconds.
+  path: Assets/WebGLTemplates
+  artifactKey: Guid(b5d5915161b67450a882f92768e19e3d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/WebGLTemplates using Guid(b5d5915161b67450a882f92768e19e3d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '86dd9b30ecb19dd633163ee44a8ba82c') in 0.009270 seconds
+  Import took 0.012854 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.075141 seconds.
+  path: Assets/WebGLTemplates
+  artifactKey: Guid(b5d5915161b67450a882f92768e19e3d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/WebGLTemplates using Guid(b5d5915161b67450a882f92768e19e3d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '86dd9b30ecb19dd633163ee44a8ba82c') in 0.003694 seconds
+  Import took 0.007483 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 100.102035 seconds.
+  path: Assets/WebGLTemplates/MyTemplate
+  artifactKey: Guid(65f0e278a794240ac880a038b8fda4f1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/WebGLTemplates/MyTemplate using Guid(65f0e278a794240ac880a038b8fda4f1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e69832ac3834a44f7100521d978f71f9') in 0.003453 seconds
+  Import took 0.007070 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 47.869059 seconds.
+  path: Assets/WebGLTemplates/MyTemplate/TemplateData
+  artifactKey: Guid(731b408487e844abab5e50e1b48f8bd2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/WebGLTemplates/MyTemplate/TemplateData using Guid(731b408487e844abab5e50e1b48f8bd2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e50f56478bbbf6d1ac8e124871aaeaff') in 0.003538 seconds
+  Import took 0.008244 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 126.036607 seconds.
+  path: Assets/WebGLTemplates/MyTemplate/index.html
+  artifactKey: Guid(c09422f0bc1c049ad8e428f6229e0193) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/WebGLTemplates/MyTemplate/index.html using Guid(c09422f0bc1c049ad8e428f6229e0193) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd259674306fd7a5b0f0d98fe27e4ccb6') in 0.663643 seconds
+  Import took 0.667370 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 194.143718 seconds.
+  path: Assets/WebGLTemplates/MyTemplate/index.html
+  artifactKey: Guid(c09422f0bc1c049ad8e428f6229e0193) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/WebGLTemplates/MyTemplate/index.html using Guid(c09422f0bc1c049ad8e428f6229e0193) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a6801bae5d9d6cb0ba98b0ac4ebf9142') in 0.010598 seconds
+  Import took 0.015003 seconds .
+
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 2.75 ms, found 1 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 127.0 MB.
+System memory in use after: 127.1 MB.
+
+Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 2156.
+Total: 2.213192 ms (FindLiveObjects: 0.253866 ms CreateObjectMapping: 0.072157 ms MarkObjects: 1.830596 ms  DeleteObjects: 0.054916 ms)
+
