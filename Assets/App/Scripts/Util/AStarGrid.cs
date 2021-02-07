@@ -110,6 +110,7 @@ namespace App.Util
             }
         }
 
+        // x, y なので注意
         Node[,] _nodes;
         readonly List<Node> _openNodes = new List<Node>();
         
@@ -160,12 +161,12 @@ namespace App.Util
         void OpenNode(int x, int y, Node parent, Node goal)
         {
             // ノード範囲チェック
-            if (x < 0 || x > _nodes.GetLength(1) - 1 || y < 0 || y > _nodes.GetLength(0) - 1)
+            if (x < 0 || x > _nodes.GetLength(0) - 1 || y < 0 || y > _nodes.GetLength(1) - 1)
             {
                 return;
             }
             
-            var target = _nodes[y, x];
+            var target = _nodes[x, y];
             if (target.IsOpened)
             {
                 return;

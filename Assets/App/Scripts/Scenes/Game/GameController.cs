@@ -9,15 +9,14 @@ namespace App.Scenes.Game
 {
     public class GameController : MonoBehaviour
     {
-        [SerializeField] StageManager _stageManager;
-        [SerializeField] UnitsManager _unitsManager;
+        [SerializeField] Stage _stage;
         [SerializeField] CinemachineVirtualCamera _vcam1;
 
         [SerializeField] Image _fullScreenBoard;
         [SerializeField] GameObject _gameOverPanel;
         [SerializeField] Button _retryButton;
         [SerializeField] UnitHealthBar _playerHealthBar;
-        
+
         StateMachine<GameController> _sm;
 
         void Awake()
@@ -47,32 +46,31 @@ namespace App.Scenes.Game
 
             IEnumerator Initialize()
             {
-                Context._unitsManager.Initialize();
-                Context._stageManager.Initialize();
+                yield return Context._stage.Initialize();
 
                 Context._fullScreenBoard.gameObject.SetActive(true);
                 Context._gameOverPanel.gameObject.SetActive(false);
                 
-                yield return Context._stageManager.CreateStage();
+                yield return Context._stage.CreateStage();
 
-                yield return Context._unitsManager.CreatePlayer(
-                    Context._stageManager.GetCell(new GridCoord(4, 4)),
+                yield return Context._stage.CreatePlayer(
+                    Context._stage.GetCell(new GridCoord(4, 4)),
                     Constants.CardinalDirection.S);
-                Context._unitsManager.SetPlayerCamera(Context._vcam1);
+                Context._stage.SetPlayerCamera(Context._vcam1);
 
-                yield return Context._unitsManager.CreateEnemy(
-                    Context._stageManager.GetCell(new GridCoord(2, 2)), 
+                yield return Context._stage.CreateEnemy(
+                    Context._stage.GetCell(new GridCoord(2, 2)), 
                     EnumUtil.Random<Constants.CardinalDirection>());
-                yield return Context._unitsManager.CreateEnemy(
-                    Context._stageManager.GetCell(new GridCoord(1, 2)),
+                yield return Context._stage.CreateEnemy(
+                    Context._stage.GetCell(new GridCoord(1, 2)),
                     EnumUtil.Random<Constants.CardinalDirection>());
-                yield return Context._unitsManager.CreateEnemy(
-                    Context._stageManager.GetCell(new GridCoord(7, 7)),
+                yield return Context._stage.CreateEnemy(
+                    Context._stage.GetCell(new GridCoord(7, 7)),
                     EnumUtil.Random<Constants.CardinalDirection>());
 
-                yield return Context._unitsManager.CreateWall(Context._stageManager.GetCell(new GridCoord(3, 2)));
-                yield return Context._unitsManager.CreateWall(Context._stageManager.GetCell(new GridCoord(5, 4)));
-                yield return Context._unitsManager.CreateWall(Context._stageManager.GetCell(new GridCoord(3, 3)));
+                yield return Context._stage.CreateWall(Context._stage.GetCell(new GridCoord(3, 2)));
+                yield return Context._stage.CreateWall(Context._stage.GetCell(new GridCoord(5, 4)));
+                yield return Context._stage.CreateWall(Context._stage.GetCell(new GridCoord(3, 3)));
 
                 Context._fullScreenBoard.gameObject.SetActive(false);
 
@@ -117,23 +115,22 @@ namespace App.Scenes.Game
             {
                 if (!_inputEnabled) yield break;
 
-                var targetCoord = Context._unitsManager.Player.Cell.Coord.GetAdjacentCoord(direction);
-                if (!Context._stageManager.IsMovableOrAttackableCell(targetCoord))
+                var targetCoord = Context._stage.Player.Cell.Coord.GetAdjacentCoord(direction);
+                if (!Context._stage.IsMovableOrAttackableCell(targetCoord))
                 {
                     yield break;
                 }
  
                 _inputEnabled = false;
                 
-                var cell = Context._stageManager.GetCell(targetCoord);
+                var cell = Context._stage.GetCell(targetCoord);
                 if (!ReferenceEquals(cell.Unit, null) && cell.Unit.UnitType == Constants.UnitType.Enemy)
                 {
-                    Debug.Log($"Player Attack! enemyId:{cell.Unit.Id}");
-                    yield return Context._unitsManager.Player.Attack(cell.Unit);
+                    yield return Context._stage.Player.Attack(cell.Unit);
                 }
                 else
                 {
-                    yield return Context._unitsManager.Player.Move(cell);
+                    yield return Context._stage.Player.Move(cell);
                 }
 
                 StateMachine.Transit<EnemyTurnState>();
@@ -149,7 +146,7 @@ namespace App.Scenes.Game
 
             IEnumerator MoveEnemies()
             {
-                foreach (var enemy in Context._unitsManager.Enemies)
+                foreach (var enemy in Context._stage.Enemies)
                 {
                     if (ReferenceEquals(enemy, null))
                     {
@@ -158,7 +155,7 @@ namespace App.Scenes.Game
                     
                     yield return MoveEnemy(enemy);
                     
-                    if (Context._unitsManager.Player.UnitStatus.Health <= 0)
+                    if (Context._stage.Player.UnitStatus.Health <= 0)
                     {
                         StateMachine.Transit<GameOverState>();
                         yield break;
@@ -170,7 +167,7 @@ namespace App.Scenes.Game
 
             IEnumerator MoveEnemy(Unit enemy)
             {
-                var result = Context._stageManager.FindPath(enemy.Cell.Coord, Context._unitsManager.Player.Cell.Coord);
+                var result = Context._stage.FindPath(enemy.Cell.Coord, Context._stage.Player.Cell.Coord);
                 if (result == null)
                 {
                     Debug.Log("Path not found!");
@@ -178,11 +175,10 @@ namespace App.Scenes.Game
                     yield break;
                 }
 
-                var cell = Context._stageManager.GetCell(new GridCoord(result.FirstStepNode.X, result.FirstStepNode.Y));
-                if (cell.Coord == Context._unitsManager.Player.Cell.Coord)
+                var cell = Context._stage.GetCell(new GridCoord(result.FirstStepNode.X, result.FirstStepNode.Y));
+                if (cell.Coord == Context._stage.Player.Cell.Coord)
                 {
-                    Debug.Log($"Enemy Attack! enemyId:{enemy.Id}");
-                    yield return enemy.Attack(Context._unitsManager.Player);
+                    yield return enemy.Attack(Context._stage.Player);
                 }
                 else
                 {

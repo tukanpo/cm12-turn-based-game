@@ -14,8 +14,8 @@ namespace App.Util
 
         public T this [int x, int y]
         {
-            get { return _fileds[x, y]; }
-            set { _fileds[x, y] = value; }
+            get => _fileds[x, y];
+            set => _fileds[x, y] = value;
         }
 
         public Array2d(int sizeX, int sizeY)
@@ -42,8 +42,6 @@ namespace App.Util
 
         public IEnumerator<T> GetEnumerator()
         {
-            // MEMO: これ何だったか思い出せん
-            // return _fileds.SelectMany(x => x).GetEnumerator();
             return _fileds.Cast<T>().GetEnumerator();
         }
 
