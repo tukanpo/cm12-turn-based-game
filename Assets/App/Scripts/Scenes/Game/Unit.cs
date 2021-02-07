@@ -7,9 +7,11 @@ namespace App.Scenes.Game
 {
     public class Unit : MonoBehaviour
     {
+        [SerializeField] UnitAnimation _unitAnimation;
+        
         // Blink 用にとりあえず
         [SerializeField] GameObject _body;
-
+        
         public int Id { get; private set; }
         
         public Constants.UnitType UnitType { get; private set; }
@@ -68,8 +70,6 @@ namespace App.Scenes.Game
             Direction = direction;
         }
         
-        // TODO: ここでコマンドを受け取る。ここで実行されるのはアニメーションのみにする（？）
-
         public IEnumerator Move(GridCell destinationCell)
         {
             // 移動前のセルから参照を外して移動先セルに参照をセットする
@@ -78,7 +78,7 @@ namespace App.Scenes.Game
             destinationCell.Unit = this;
 
             var speed = UnitType == Constants.UnitType.Player ? 3.5f : 6f;
-            yield return MoveOverSpeed(destinationCell.Tile.transform.position, speed);
+            yield return _unitAnimation.MoveOverSpeed(destinationCell.Tile.transform.position, speed);
             yield return new WaitForSeconds(0.1f);
             
             Cell = destinationCell;
@@ -88,7 +88,7 @@ namespace App.Scenes.Game
         {
             transform.LookAt(target.transform);
             
-            yield return target.Defence();
+            yield return target.TakeDamage();
 
             if (target.UnitStatus.Health <= 0)
             {
@@ -98,62 +98,10 @@ namespace App.Scenes.Game
             yield return new WaitForSeconds(0.3f);
         }
 
-        public IEnumerator Defence()
+        public IEnumerator TakeDamage()
         {
             UnitStatus.Health -= 1;
-            yield return Blink(0.3f);
-
-            if (UnitStatus.Health <= 0)
-            {
-                yield return Die();
-            }
-        }
-
-        public IEnumerator Die()
-        {
-            yield break;
-        }
-
-        IEnumerator MoveOverSpeed(Vector3 destination, float speed)
-        {
-            transform.LookAt(destination);
-
-            while (Vector3.Distance(transform.position, destination) > float.Epsilon)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
-                yield return null;
-            }
-        }
-
-        IEnumerator MoveOverSeconds(Vector3 destination, float seconds)
-        {
-            float elapsedTime = 0;
-            while (elapsedTime < seconds)
-            {
-                var position = transform.position;
-                var time = Vector3.Distance(position, destination) / (seconds - elapsedTime) * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(position, destination, time);
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-        }
-
-        IEnumerator Blink(float duration)
-        {
-            var mat = _body.GetComponent<Renderer>().material;
-            var originalColor = mat.color;
-            
-            var limit = Time.time + duration;
-            while (Time.time < limit)
-            {
-                // ちょっと duration をオーバーする場合があるけど…
-                mat.color = new Color(1f, 1f, 0f);
-                yield return new WaitForSeconds(0.1f);
-                mat.color = originalColor;
-                yield return new WaitForSeconds(0.1f);
-            }
-            
-            mat.color = originalColor;
+            yield return _unitAnimation.Blink(0.3f, _body.GetComponent<Renderer>().material);
         }
     }
 }
