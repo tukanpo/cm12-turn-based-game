@@ -7,8 +7,9 @@ namespace App.Scenes.Game
 {
     public class Unit : MonoBehaviour
     {
+        // Blink 用にとりあえず
         [SerializeField] GameObject _body;
-        
+
         public int Id { get; private set; }
         
         public Constants.UnitType UnitType { get; private set; }
@@ -37,7 +38,7 @@ namespace App.Scenes.Game
             unit.UnitType = unitType;
             unit.UnitStatus = new UnitStatus();
             cell.Unit = unit;
-            
+
             return unit;
         }
 
@@ -76,14 +77,8 @@ namespace App.Scenes.Game
             Cell = null;
             destinationCell.Unit = this;
 
-            // yield return Turn(destinationCell.Tile.transform, 5f);
-            
             var speed = UnitType == Constants.UnitType.Player ? 3.5f : 6f;
             yield return MoveOverSpeed(destinationCell.Tile.transform.position, speed);
-
-            // var seconds = UnitType == Constants.UnitType.Player ? 1f : 0.5f;
-            // yield return MoveOverSeconds(destinationCell.Tile.transform.position, seconds);
-
             yield return new WaitForSeconds(0.1f);
             
             Cell = destinationCell;
@@ -93,7 +88,6 @@ namespace App.Scenes.Game
         {
             transform.LookAt(target.transform);
             
-            // TODO: ★直接呼びたくない！ 非同期にしたい
             yield return target.Defence();
 
             if (target.UnitStatus.Health <= 0)
@@ -143,39 +137,6 @@ namespace App.Scenes.Game
                 yield return null;
             }
         }
-
-        // IEnumerator Turn(Transform target, float seconds)
-        // {
-        //     var relativePos = target.position - transform.position;
-        //     relativePos.y = 0;
-        //
-        //     var lookRotation = Quaternion.LookRotation(relativePos);
-        //
-        //     float elapsedTime = 0;
-        //     while (elapsedTime < seconds)
-        //     {
-        //         transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, elapsedTime / seconds);
-        //         elapsedTime += Time.deltaTime;
-        //         yield return null;
-        //     }
-        //
-        //     Debug.Log("Turn End");
-        // }
-        //
-        // IEnumerator Turn2(Transform target, float speed)
-        // {
-        //     var diff = target.position - transform.position;
-        //     var angle = Vector3.Angle(target.forward, diff);
-        //     diff.y = 0;
-        //
-        //     var lookRotation = Quaternion.LookRotation(diff);
-        //
-        //     while (Math.Abs(angle - Vector3.Angle(transform.forward, diff)) > float.Epsilon)
-        //     {
-        //         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, speed * Time.deltaTime);
-        //         yield return null;
-        //     }
-        // }
 
         IEnumerator Blink(float duration)
         {

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using App.Scenes.Game.Structure;
@@ -90,7 +89,7 @@ namespace App.Scenes.Game
             var index = Enemies.IndexOf(unit);
             Enemies[index] = null;
         }
-
+        
         public void SetPlayerCamera(CinemachineVirtualCamera vcam)
         {
             var playerTransform = Player.transform;

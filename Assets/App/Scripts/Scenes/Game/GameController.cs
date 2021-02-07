@@ -16,6 +16,7 @@ namespace App.Scenes.Game
         [SerializeField] Image _fullScreenBoard;
         [SerializeField] GameObject _gameOverPanel;
         [SerializeField] Button _retryButton;
+        [SerializeField] UnitHealthBar _playerHealthBar;
         
         StateMachine<GameController> _sm;
 

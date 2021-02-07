@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 namespace App.Util
 {
+    /// <summary>
+    /// 簡易ステートマシン
+    /// </summary>
+    /// <typeparam name="TContext">
+    /// ステート内からアクセスする状態オブジェクトの型
+    /// </typeparam>
     public class StateMachine<TContext>
     {
         public abstract class State
