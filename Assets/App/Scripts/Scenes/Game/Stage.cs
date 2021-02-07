@@ -10,13 +10,13 @@ namespace App.Scenes.Game
 {
     public class Stage : MonoBehaviour
     {
-        public Unit Player { get; private set; }
+        [SerializeField] PlayerHealthBar _playerHealthBar;
+        
+        public PlayerUnit Player { get; private set; }
 
         public List<Unit> Enemies { get; } = new List<Unit>();
 
         public List<Unit> StaticObjects { get; } = new List<Unit>();
-
-        int _unitIdCount;
 
         GridCell[,] _cells;
         Tile _tilePrefab;
@@ -36,13 +36,14 @@ namespace App.Scenes.Game
                 prefab =>
                 {
                     Player = Unit.Spawn(
-                        _unitIdCount++,
                         Constants.UnitType.Player,
                         prefab,
                         transform, cell, direction);
                     Player.UnitStatus.Health = 3;
                     Player.UnitStatus.ActionPoint = 1;
                     Player.OnUnitDied += OnUnitDied;
+                    Player.SetHealthBar(_playerHealthBar);
+                    Player.UpdateStatusView();
                 });
         }
 
@@ -52,13 +53,13 @@ namespace App.Scenes.Game
                 prefab =>
                 {
                     var unit = Unit.Spawn(
-                        _unitIdCount++,
                         Constants.UnitType.Enemy,
                         prefab,
                         transform, cell, direction);
                     unit.UnitStatus.Health = 1;
                     unit.UnitStatus.ActionPoint = 1;
                     unit.OnUnitDied += OnUnitDied;
+                    unit.UpdateStatusView();
                     Enemies.Add(unit);
                 });
         }
@@ -69,7 +70,6 @@ namespace App.Scenes.Game
                 prefab =>
                 {
                     var unit = Unit.Spawn(
-                        _unitIdCount++,
                         Constants.UnitType.StaticObject,
                         prefab, transform, cell, Constants.CardinalDirection.N);
                     StaticObjects.Add(unit);
@@ -148,8 +148,7 @@ namespace App.Scenes.Game
         
         void InitializeUnits()
         {
-            _unitIdCount = 0;
-
+            // 掃除
             if (!ReferenceEquals(Player, null))
             {
                 Destroy(Player.gameObject);

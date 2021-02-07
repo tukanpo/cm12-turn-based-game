@@ -356,7 +356,7 @@ MonoBehaviour:
   _fullScreenBoard: {fileID: 1060548498}
   _gameOverPanel: {fileID: 1712004226}
   _retryButton: {fileID: 525869968}
-  _playerHealthBar: {fileID: 1581115929}
+  _playerHealthBar: {fileID: 0}
 --- !u!1 &525869966
 GameObject:
   m_ObjectHideFlags: 0
@@ -1468,7 +1468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d7f0da1750c4170a9bb28cf97bd3dec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tilePrefab: {fileID: 3829966496149291026, guid: df48de21f180b44cf9aad8ea28628dc9, type: 3}
+  _playerHealthBar: {fileID: 1581115929}
 --- !u!1 &1581115925
 GameObject:
   m_ObjectHideFlags: 0
@@ -1559,7 +1559,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1581115925}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 320208dadaeb47d5adc9f986bea82298, type: 3}
+  m_Script: {fileID: 11500000, guid: 345648e52134b420887a7604ead49498, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _dots:

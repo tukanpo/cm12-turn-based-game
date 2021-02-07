@@ -8,7 +8,7 @@ namespace App.Scenes.Game
 {
     public static class AssetLoader
     {
-        public static IEnumerator LoadPlayerUnitPrefab(Action<Unit> callback)
+        public static IEnumerator LoadPlayerUnitPrefab(Action<PlayerUnit> callback)
         {
             yield return LoadGameObject("PlayerUnit", callback);
         }
