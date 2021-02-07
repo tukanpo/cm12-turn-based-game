@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using App.Scenes.Game.Structure;
@@ -8,10 +9,6 @@ namespace App.Scenes.Game
 {
     public class UnitsManager : MonoBehaviour
     {
-        [SerializeField] Unit _playerPrefab;
-        [SerializeField] Unit _enemyPrefab;
-        [SerializeField] Unit _wallPrefab;
-
         public Unit Player { get; private set; }
 
         public List<Unit> Enemies { get; } = new List<Unit>();
@@ -45,36 +42,50 @@ namespace App.Scenes.Game
             StaticObjects.Clear();
         }
 
-        public void CreatePlayer(GridCell cell, Constants.CardinalDirection direction)
+        public IEnumerator CreatePlayer(GridCell cell, Constants.CardinalDirection direction)
         {
-            Player = Unit.Spawn(
-                _unitIdCount++,
-                Constants.UnitType.Player,
-                _playerPrefab, transform, cell, direction);
-            Player.UnitStatus.Health = 3;
-            Player.UnitStatus.ActionPoint = 1;
-            Player.OnUnitDied += OnUnitDied;
+            yield return AssetLoader.LoadPlayerUnitPrefab(
+                prefab =>
+                {
+                    Player = Unit.Spawn(
+                        _unitIdCount++,
+                        Constants.UnitType.Player,
+                        prefab,
+                        transform, cell, direction);
+                    Player.UnitStatus.Health = 3;
+                    Player.UnitStatus.ActionPoint = 1;
+                    Player.OnUnitDied += OnUnitDied;
+                });
         }
 
-        public void CreateEnemy(GridCell cell, Constants.CardinalDirection direction)
+        public IEnumerator CreateEnemy(GridCell cell, Constants.CardinalDirection direction)
         {
-            var unit = Unit.Spawn(
-                _unitIdCount++,
-                Constants.UnitType.Enemy,
-                _enemyPrefab, transform, cell, direction);
-            unit.UnitStatus.Health = 2;
-            unit.UnitStatus.ActionPoint = 1;
-            unit.OnUnitDied += OnUnitDied;
-            Enemies.Add(unit);
+            yield return AssetLoader.LoadEnemyUnitPrefab(
+                prefab =>
+                {
+                    var unit = Unit.Spawn(
+                        _unitIdCount++,
+                        Constants.UnitType.Enemy,
+                        prefab,
+                        transform, cell, direction);
+                    unit.UnitStatus.Health = 2;
+                    unit.UnitStatus.ActionPoint = 1;
+                    unit.OnUnitDied += OnUnitDied;
+                    Enemies.Add(unit);
+                });
         }
 
-        public void CreateWall(GridCell cell)
+        public IEnumerator CreateWall(GridCell cell)
         {
-            var unit = Unit.Spawn(
-                _unitIdCount++,
-                Constants.UnitType.StaticObject,
-                _wallPrefab, transform, cell, Constants.CardinalDirection.N);
-            StaticObjects.Add(unit);
+            yield return AssetLoader.LoadWallPrefab(
+                prefab =>
+                {
+                    var unit = Unit.Spawn(
+                        _unitIdCount++,
+                        Constants.UnitType.StaticObject,
+                        prefab, transform, cell, Constants.CardinalDirection.N);
+                    StaticObjects.Add(unit);
+                });
         }
 
         void OnUnitDied(Unit unit)

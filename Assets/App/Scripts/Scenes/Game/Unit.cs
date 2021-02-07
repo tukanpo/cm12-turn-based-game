@@ -12,13 +12,13 @@ namespace App.Scenes.Game
         // Blink 用にとりあえず
         [SerializeField] GameObject _body;
         
-        public int Id { get; private set; }
+        public int Id { get; protected set; }
         
-        public Constants.UnitType UnitType { get; private set; }
+        public Constants.UnitType UnitType { get; protected set; }
         
-        public UnitStatus UnitStatus { get; private set; }
+        public UnitStatus UnitStatus { get; protected set; }
         
-        public GridCell Cell { get; private set; }
+        public GridCell Cell { get; protected set; }
         
         public Constants.CardinalDirection Direction { get; protected set; }
         

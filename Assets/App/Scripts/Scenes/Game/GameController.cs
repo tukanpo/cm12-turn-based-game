@@ -42,37 +42,41 @@ namespace App.Scenes.Game
         {
             public override void OnEnter()
             {
+                Context.StartCoroutine(Initialize());
+            }
+
+            IEnumerator Initialize()
+            {
                 Context._unitsManager.Initialize();
                 Context._stageManager.Initialize();
 
                 Context._fullScreenBoard.gameObject.SetActive(true);
                 Context._gameOverPanel.gameObject.SetActive(false);
+                
+                yield return Context._stageManager.CreateStage();
 
-                Context._stageManager.CreateStageAsync(() =>
-                {
-                    Context._unitsManager.CreatePlayer(
-                        Context._stageManager.GetCell(new GridCoord(4, 4)),
-                        Constants.CardinalDirection.S);
-                    Context._unitsManager.SetPlayerCamera(Context._vcam1);
+                yield return Context._unitsManager.CreatePlayer(
+                    Context._stageManager.GetCell(new GridCoord(4, 4)),
+                    Constants.CardinalDirection.S);
+                Context._unitsManager.SetPlayerCamera(Context._vcam1);
 
-                    Context._unitsManager.CreateEnemy(
-                        Context._stageManager.GetCell(new GridCoord(2, 2)),
-                        EnumUtil.Random<Constants.CardinalDirection>());
-                    Context._unitsManager.CreateEnemy(
-                        Context._stageManager.GetCell(new GridCoord(1, 2)),
-                        EnumUtil.Random<Constants.CardinalDirection>());
-                    Context._unitsManager.CreateEnemy(
-                        Context._stageManager.GetCell(new GridCoord(7, 7)),
-                        EnumUtil.Random<Constants.CardinalDirection>());
-                    
-                    Context._unitsManager.CreateWall(Context._stageManager.GetCell(new GridCoord(3, 2)));
-                    Context._unitsManager.CreateWall(Context._stageManager.GetCell(new GridCoord(5, 4)));
-                    Context._unitsManager.CreateWall(Context._stageManager.GetCell(new GridCoord(3, 3)));
-                    
-                    Context._fullScreenBoard.gameObject.SetActive(false);
-                    
-                    StateMachine.Transit<PlayerTurnState>();
-                });
+                yield return Context._unitsManager.CreateEnemy(
+                    Context._stageManager.GetCell(new GridCoord(2, 2)), 
+                    EnumUtil.Random<Constants.CardinalDirection>());
+                yield return Context._unitsManager.CreateEnemy(
+                    Context._stageManager.GetCell(new GridCoord(1, 2)),
+                    EnumUtil.Random<Constants.CardinalDirection>());
+                yield return Context._unitsManager.CreateEnemy(
+                    Context._stageManager.GetCell(new GridCoord(7, 7)),
+                    EnumUtil.Random<Constants.CardinalDirection>());
+
+                yield return Context._unitsManager.CreateWall(Context._stageManager.GetCell(new GridCoord(3, 2)));
+                yield return Context._unitsManager.CreateWall(Context._stageManager.GetCell(new GridCoord(5, 4)));
+                yield return Context._unitsManager.CreateWall(Context._stageManager.GetCell(new GridCoord(3, 3)));
+
+                Context._fullScreenBoard.gameObject.SetActive(false);
+
+                StateMachine.Transit<PlayerTurnState>();
             }
         }
 
