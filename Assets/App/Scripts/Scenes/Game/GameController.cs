@@ -51,7 +51,7 @@ namespace App.Scenes.Game
                 Context._fullScreenBoard.gameObject.SetActive(true);
                 Context._gameOverPanel.gameObject.SetActive(false);
                 
-                yield return Context._stage.CreateStage();
+                yield return Context._stage.CreateStage(11, 9);
 
                 yield return Context._stage.CreatePlayer(
                     Context._stage.GetCell(new GridCoord(4, 4)),
@@ -167,7 +167,7 @@ namespace App.Scenes.Game
 
             IEnumerator MoveEnemy(Unit enemy)
             {
-                var result = Context._stage.FindPath(enemy.Cell.Coord, Context._stage.Player.Cell.Coord);
+                var result = Context._stage.FindPath(enemy.Cell, Context._stage.Player.Cell);
                 if (result == null)
                 {
                     Debug.Log("Path not found!");

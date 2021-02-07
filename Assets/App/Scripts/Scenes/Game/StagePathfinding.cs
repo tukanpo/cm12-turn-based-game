@@ -7,7 +7,7 @@ namespace App.Scenes.Game
     {
         AStarGrid _aStarGrid;
         AStarGrid.Node[,] _aStarNodes;
-
+        
         public void CreateGrid(GridCell[,] cells)
         {
             _aStarGrid = new AStarGrid();
@@ -21,10 +21,10 @@ namespace App.Scenes.Game
             }
         }
 
-        public AStarGrid.Result FindPath(GridCoord startCoord, GridCoord goalCoord)
+        public AStarGrid.Result FindPath(GridCell startCell, GridCell goalCell)
         {
-            var start = _aStarNodes[startCoord.X, startCoord.Y];
-            var goal = _aStarNodes[goalCoord.X, goalCoord.Y];
+            var start = _aStarNodes[startCell.Coord.X, startCell.Coord.Y];
+            var goal = _aStarNodes[goalCell.Coord.X, goalCell.Coord.Y];
             return _aStarGrid.FindPath(_aStarNodes, start, goal);
         }
     }

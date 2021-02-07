@@ -5,11 +5,12 @@ using UnityEngine;
 
 namespace App.Scenes.Game
 {
+    // TODO: 後で分離方法考える. とりあえず
     public class Unit : MonoBehaviour
     {
         [SerializeField] UnitAnimation _unitAnimation;
         
-        // Blink 用にとりあえず
+        // TODO: Blink 用. 要らなくなったら削除
         [SerializeField] GameObject _body;
         
         public int Id { get; protected set; }
@@ -86,6 +87,7 @@ namespace App.Scenes.Game
 
         public IEnumerator Attack(Unit target)
         {
+            // TODO: 回転を入れたらこいつは削除
             transform.LookAt(target.transform);
             
             yield return target.TakeDamage();

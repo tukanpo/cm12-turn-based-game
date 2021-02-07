@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +26,7 @@ namespace App.Scenes.Game
         {
             yield return AssetLoader.LoadFloorTilePrefab(prefab => _tilePrefab = prefab);
 
-            InitializeStage();
+            InitializeGrid();
             InitializeUnits();
         }
         
@@ -84,11 +83,8 @@ namespace App.Scenes.Game
             vcam.LookAt = playerTransform;
         }
         
-        public IEnumerator CreateStage()
+        public IEnumerator CreateStage(int sizeX, int sizeY)
         {
-            const int sizeX = 9;
-            const int sizeY = 9;
-
             // 矩形のグリッドを生成してついでにタイルも生成
             _cells = new GridCell[sizeX, sizeY];
             for (var x = 0; x < sizeX; x++)
@@ -128,13 +124,14 @@ namespace App.Scenes.Game
             return IsCoordOutOfRange(coord) ? null : _cells[coord.X, coord.Y];
         }
         
-        public AStarGrid.Result FindPath(GridCoord startCoord, GridCoord goalCoord)
+        public AStarGrid.Result FindPath(GridCell start, GridCell goal)
         {
-            return _pathfinding.FindPath(startCoord, goalCoord);
+            return _pathfinding.FindPath(start, goal);
         }
         
-        void InitializeStage()
+        void InitializeGrid()
         {
+            // 掃除する
             if (_cells != null)
             {
                 for (var x = 0; x < _cells.GetLength(0); x++)
@@ -176,6 +173,7 @@ namespace App.Scenes.Game
         
         void OnUnitDied(Unit unit)
         {
+            // 今の所は敵だけ削除する
             if (unit.UnitType != Constants.UnitType.Enemy)
             {
                 return;
