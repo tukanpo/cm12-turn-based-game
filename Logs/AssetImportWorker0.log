@@ -2215,3 +2215,35 @@ System memory in use after: 142.0 MB.
 Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 2607.
 Total: 2.768903 ms (FindLiveObjects: 0.310347 ms CreateObjectMapping: 0.191907 ms MarkObjects: 2.211155 ms  DeleteObjects: 0.054187 ms)
 
+========================================================================
+Received Import Request.
+  Time since last request: 900.710288 seconds.
+  path: Assets/AddressableAssetsData/AssetGroups/Default Local Group.asset
+  artifactKey: Guid(d3a67b858f540463cbc0ac4656ab4fef) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AddressableAssetsData/AssetGroups/Default Local Group.asset using Guid(d3a67b858f540463cbc0ac4656ab4fef) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1c66d2c4c98cc052440e0630aa0a883d') in 0.028163 seconds
+  Import took 0.033677 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.003877 seconds.
+  path: Assets/AddressableAssetsData/AssetGroups/Default Local Group.asset
+  artifactKey: Guid(d3a67b858f540463cbc0ac4656ab4fef) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AddressableAssetsData/AssetGroups/Default Local Group.asset using Guid(d3a67b858f540463cbc0ac4656ab4fef) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1c66d2c4c98cc052440e0630aa0a883d') in 0.007212 seconds
+  Import took 0.012874 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 42.492243 seconds.
+  path: Assets/AddressableAssetsData/AddressableAssetSettings.asset
+  artifactKey: Guid(a17101cee85594e018c171460f9aecf0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AddressableAssetsData/AddressableAssetSettings.asset using Guid(a17101cee85594e018c171460f9aecf0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd03b104968a95748d22aa861cfdeea99') in 0.009452 seconds
+  Import took 0.013771 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.017614 seconds.
+  path: Assets/AddressableAssetsData/AddressableAssetSettings.asset
+  artifactKey: Guid(a17101cee85594e018c171460f9aecf0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/AddressableAssetsData/AddressableAssetSettings.asset using Guid(a17101cee85594e018c171460f9aecf0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd03b104968a95748d22aa861cfdeea99') in 0.004830 seconds
+  Import took 0.009403 seconds .
+
