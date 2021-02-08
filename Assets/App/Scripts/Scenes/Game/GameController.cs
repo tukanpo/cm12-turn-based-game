@@ -110,6 +110,11 @@ namespace App.Scenes.Game
                 {
                     StateMachine.Transit<EnemyTurnState>();
                 }
+                else if (Input.GetKey(KeyCode.Return))
+                {
+                    // リスタート
+                    StateMachine.Transit<StageStartState>();
+                }
             }
 
             IEnumerator MovePlayer(Constants.CardinalDirection direction)
