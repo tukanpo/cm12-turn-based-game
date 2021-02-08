@@ -31,11 +31,12 @@
   </assembly>
   <assembly fullname="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="App.Scenes.Game.UnitAnimation" preserve="all" />
-    <type fullname="App.Scenes.Game.UnitHealthBar" preserve="all" />
+    <type fullname="App.Scenes.Game.UnitStatusBar" preserve="all" />
     <type fullname="App.Scenes.Game.EnemyUnit" preserve="all" />
     <type fullname="App.Scenes.Game.Tile" preserve="all" />
     <type fullname="App.Scenes.Game.Unit" preserve="all" />
     <type fullname="App.Scenes.Game.PlayerUnit" preserve="all" />
+    <type fullname="App.Scenes.Game.StatusBarDot" preserve="all" />
   </assembly>
   <assembly fullname="Unity.ProBuilder, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="UnityEngine.ProBuilder.ProBuilderMesh" preserve="all" />
