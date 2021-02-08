@@ -3,6 +3,9 @@ using App.Util;
 
 namespace App.Scenes.Game
 {
+    /// <summary>
+    /// ステージ内経路探索
+    /// </summary>
     public class StagePathfinding
     {
         AStarGrid _aStarGrid;

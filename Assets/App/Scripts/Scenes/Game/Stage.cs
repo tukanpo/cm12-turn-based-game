@@ -10,8 +10,9 @@ namespace App.Scenes.Game
 {
     public class Stage : MonoBehaviour
     {
-        [SerializeField] PlayerHealthBar _playerHealthBar;
-        
+        [SerializeField] StatusBar _playerHealthBar;
+        [SerializeField] StatusBar _playerActionPointBar;
+
         public PlayerUnit Player { get; private set; }
 
         public List<Unit> Enemies { get; } = new List<Unit>();
@@ -39,10 +40,13 @@ namespace App.Scenes.Game
                         Constants.UnitType.Player,
                         prefab,
                         transform, cell, direction);
+                    Player.UnitStatus.MaxHealth = 3;
                     Player.UnitStatus.Health = 3;
+                    Player.UnitStatus.MaxActionPoint = 1;
                     Player.UnitStatus.ActionPoint = 1;
                     Player.OnUnitDied += OnUnitDied;
                     Player.SetHealthBar(_playerHealthBar);
+                    Player.SetActionPointBar(_playerActionPointBar);
                     Player.UpdateStatusView();
                 });
         }
@@ -56,7 +60,9 @@ namespace App.Scenes.Game
                         Constants.UnitType.Enemy,
                         prefab,
                         transform, cell, direction);
+                    unit.UnitStatus.MaxHealth = 1;
                     unit.UnitStatus.Health = 1;
+                    unit.UnitStatus.MaxActionPoint = 1;
                     unit.UnitStatus.ActionPoint = 1;
                     unit.OnUnitDied += OnUnitDied;
                     unit.UpdateStatusView();

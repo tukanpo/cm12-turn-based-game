@@ -5,16 +5,16 @@ namespace App.Scenes.Game
 {
     public class EnemyUnit : Unit
     {
-        [SerializeField] UnitHealthBar _healthBar;
+        [SerializeField] UnitStatusBar _statusBar;
 
         public override void UpdateStatusView()
         {
-            if (ReferenceEquals(_healthBar, null))
+            if (ReferenceEquals(_statusBar, null))
             {
                 throw new Exception();
             }
             
-            _healthBar.UpdateHealth(UnitStatus.Health);
+            _statusBar.UpdateValue(UnitStatus.Health, UnitStatus.MaxHealth);
         }
     }
 }

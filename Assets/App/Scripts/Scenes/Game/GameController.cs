@@ -15,7 +15,6 @@ namespace App.Scenes.Game
         [SerializeField] Image _fullScreenBoard;
         [SerializeField] GameObject _gameOverPanel;
         [SerializeField] Button _retryButton;
-        [SerializeField] UnitHealthBar _playerHealthBar;
 
         StateMachine<GameController> _sm;
 
@@ -85,6 +84,8 @@ namespace App.Scenes.Game
             public override void OnEnter()
             {
                 _inputEnabled = true;
+
+                Context._stage.Player.ResetActionPoint();
             }
 
             public override void OnUpdate()
@@ -133,7 +134,10 @@ namespace App.Scenes.Game
                     yield return Context._stage.Player.Move(cell);
                 }
 
-                StateMachine.Transit<EnemyTurnState>();
+                if (Context._stage.Player.UnitStatus.ActionPoint == 0)
+                {
+                    StateMachine.Transit<EnemyTurnState>();
+                }
             }
         }
 
