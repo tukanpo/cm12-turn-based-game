@@ -32,7 +32,23 @@ namespace App.Scenes.Game
                 yield return null;
             }
         }
+        
+        public IEnumerator Attack(Vector3 destination, float speed)
+        {
+            transform.LookAt(destination);
 
+            var origin = transform.position;
+            var center = Vector3.Lerp(origin, destination, 0.5f);
+
+            while (Vector3.Distance(transform.position, center) > float.Epsilon)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, center, speed * Time.deltaTime);
+                yield return null;
+            }
+
+            transform.position = origin;
+        }
+        
         public IEnumerator Blink(float duration, Material material)
         {
             var originalColor = material.color;

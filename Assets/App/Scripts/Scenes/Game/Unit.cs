@@ -39,12 +39,6 @@ namespace App.Scenes.Game
 
             return unit;
         }
-
-        public void ResetActionPoint()
-        {
-            UnitStatus.ActionPoint = UnitStatus.MaxActionPoint;
-            UpdateStatusView();
-        }
         
         public IEnumerator Move(GridCell destinationCell)
         {
@@ -52,9 +46,6 @@ namespace App.Scenes.Game
             Cell.Unit = null;
             Cell = null;
             destinationCell.Unit = this;
-
-            UnitStatus.ActionPoint -= 1;
-            UpdateStatusView();
 
             var speed = UnitType == Constants.UnitType.Player ? 3.5f : 6f;
             yield return _unitAnimation.MoveOverSpeed(destinationCell.Tile.transform.position, speed);
@@ -65,12 +56,10 @@ namespace App.Scenes.Game
 
         public IEnumerator Attack(Unit target)
         {
-            UnitStatus.ActionPoint -= 1;
-            UpdateStatusView();
-
             // TODO: 回転を入れたらこいつは削除
             transform.LookAt(target.transform);
-            
+
+            yield return _unitAnimation.Attack(target.Cell.Tile.transform.position, 10f);
             yield return target.TakeDamage();
 
             if (target.UnitStatus.Health <= 0)

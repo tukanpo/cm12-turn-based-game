@@ -10,7 +10,6 @@ namespace App.Scenes.Game
     public class Stage : MonoBehaviour
     {
         [SerializeField] StatusBar _playerHealthBar;
-        [SerializeField] StatusBar _playerActionPointBar;
 
         public PlayerUnit Player { get; private set; }
 
@@ -41,11 +40,8 @@ namespace App.Scenes.Game
                         transform, cell, direction);
                     Player.UnitStatus.MaxHealth = 3;
                     Player.UnitStatus.Health = 3;
-                    Player.UnitStatus.MaxActionPoint = 1;
-                    Player.UnitStatus.ActionPoint = 1;
                     Player.OnUnitDied += OnUnitDied;
                     Player.SetHealthBar(_playerHealthBar);
-                    Player.SetActionPointBar(_playerActionPointBar);
                     Player.UpdateStatusView();
                 });
         }
@@ -61,8 +57,6 @@ namespace App.Scenes.Game
                         transform, cell, direction);
                     unit.UnitStatus.MaxHealth = 1;
                     unit.UnitStatus.Health = 1;
-                    unit.UnitStatus.MaxActionPoint = 1;
-                    unit.UnitStatus.ActionPoint = 1;
                     unit.OnUnitDied += OnUnitDied;
                     unit.UpdateStatusView();
                     Enemies.Add(unit);

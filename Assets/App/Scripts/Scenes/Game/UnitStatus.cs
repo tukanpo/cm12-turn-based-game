@@ -4,10 +4,6 @@ namespace App.Scenes.Game
     {
         public int MaxHealth { get; set; }
 
-        public int MaxActionPoint { get; set; }
-
         public int Health { get; set; }
-        
-        public int ActionPoint { get; set; }
     }
 }

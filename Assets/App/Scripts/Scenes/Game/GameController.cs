@@ -83,8 +83,6 @@ namespace App.Scenes.Game
             public override void OnEnter()
             {
                 _inputEnabled = true;
-
-                Context._stage.Player.ResetActionPoint();
             }
 
             public override void OnUpdate()
@@ -120,6 +118,7 @@ namespace App.Scenes.Game
             {
                 if (!_inputEnabled) yield break;
 
+                // TODO: コマンド化できそう
                 var targetCoord = Context._stage.Player.Cell.GetAdjacentCoord(direction);
                 if (!Context._stage.IsMovableOrAttackableCell(targetCoord))
                 {
@@ -127,7 +126,7 @@ namespace App.Scenes.Game
                 }
  
                 _inputEnabled = false;
-                
+
                 var cell = Context._stage.GetCell(targetCoord);
                 if (!ReferenceEquals(cell.Unit, null) && cell.Unit.UnitType == Constants.UnitType.Enemy)
                 {
@@ -138,10 +137,7 @@ namespace App.Scenes.Game
                     yield return Context._stage.Player.Move(cell);
                 }
 
-                if (Context._stage.Player.UnitStatus.ActionPoint == 0)
-                {
-                    StateMachine.Transit<EnemyTurnState>();
-                }
+                StateMachine.Transit<EnemyTurnState>();
             }
         }
 
