@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using App.Scenes.Game.Structure;
 using UnityEngine;
 
 namespace App.Scenes.Game

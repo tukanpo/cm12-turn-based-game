@@ -1,4 +1,3 @@
-using App.Scenes.Game.Structure;
 using App.Util;
 
 namespace App.Scenes.Game
@@ -26,8 +25,8 @@ namespace App.Scenes.Game
 
         public AStarGrid.Result FindPath(GridCell startCell, GridCell goalCell)
         {
-            var start = _aStarNodes[startCell.Coord.X, startCell.Coord.Y];
-            var goal = _aStarNodes[goalCell.Coord.X, goalCell.Coord.Y];
+            var start = _aStarNodes[startCell.Coord.x, startCell.Coord.y];
+            var goal = _aStarNodes[goalCell.Coord.x, goalCell.Coord.y];
             return _aStarGrid.FindPath(_aStarNodes, start, goal);
         }
     }

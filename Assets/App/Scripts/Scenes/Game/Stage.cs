@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using App.Scenes.Game.Structure;
 using App.Util;
 using Cinemachine;
 using UnityEngine;
@@ -97,7 +96,7 @@ namespace App.Scenes.Game
             {
                 for (var y = 0; y < sizeY; y++)
                 {
-                    var cell = new GridCell(new GridCoord(x, y));
+                    var cell = new GridCell(new Vector2Int(x, y));
                     cell.CreateTile(_tilePrefab, transform);
                     _cells[x, y] = cell;
                 }
@@ -109,25 +108,25 @@ namespace App.Scenes.Game
             _pathfinding.CreateGrid(_cells);
         }
 
-        public bool IsCoordOutOfRange(GridCoord coord)
+        public bool IsCoordOutOfRange(Vector2Int coord)
         {
-            return coord.X < 0 || coord.X >= _cells.GetLength(0) || coord.Y < 0 || coord.Y >= _cells.GetLength(1);
+            return coord.x < 0 || coord.x >= _cells.GetLength(0) || coord.y < 0 || coord.y >= _cells.GetLength(1);
         }
 
-        public bool IsMovableOrAttackableCell(GridCoord coord)
+        public bool IsMovableOrAttackableCell(Vector2Int coord)
         {
             if (IsCoordOutOfRange(coord))
             {
                 return false;
             }
             
-            var unit = _cells[coord.X, coord.Y].Unit;
+            var unit = _cells[coord.x, coord.y].Unit;
             return !(!ReferenceEquals(unit, null) && unit.UnitType == Constants.UnitType.StaticObject);
         }
         
-        public GridCell GetCell(GridCoord coord)
+        public GridCell GetCell(Vector2Int coord)
         {
-            return IsCoordOutOfRange(coord) ? null : _cells[coord.X, coord.Y];
+            return IsCoordOutOfRange(coord) ? null : _cells[coord.x, coord.y];
         }
         
         public AStarGrid.Result FindPath(GridCell start, GridCell goal)

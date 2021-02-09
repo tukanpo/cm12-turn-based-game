@@ -1,5 +1,4 @@
 using System.Collections;
-using App.Scenes.Game.Structure;
 using App.Util;
 using Cinemachine;
 using UnityEngine;
@@ -53,23 +52,23 @@ namespace App.Scenes.Game
                 yield return Context._stage.CreateStage(11, 9);
 
                 yield return Context._stage.CreatePlayer(
-                    Context._stage.GetCell(new GridCoord(4, 4)),
+                    Context._stage.GetCell(new Vector2Int(4, 4)),
                     Constants.CardinalDirection.S);
                 Context._stage.SetPlayerCamera(Context._vcam1);
 
                 yield return Context._stage.CreateEnemy(
-                    Context._stage.GetCell(new GridCoord(2, 2)), 
+                    Context._stage.GetCell(new Vector2Int(2, 2)), 
                     EnumUtil.Random<Constants.CardinalDirection>());
                 yield return Context._stage.CreateEnemy(
-                    Context._stage.GetCell(new GridCoord(1, 2)),
+                    Context._stage.GetCell(new Vector2Int(1, 2)),
                     EnumUtil.Random<Constants.CardinalDirection>());
                 yield return Context._stage.CreateEnemy(
-                    Context._stage.GetCell(new GridCoord(7, 7)),
+                    Context._stage.GetCell(new Vector2Int(7, 7)),
                     EnumUtil.Random<Constants.CardinalDirection>());
 
-                yield return Context._stage.CreateWall(Context._stage.GetCell(new GridCoord(3, 2)));
-                yield return Context._stage.CreateWall(Context._stage.GetCell(new GridCoord(5, 4)));
-                yield return Context._stage.CreateWall(Context._stage.GetCell(new GridCoord(3, 3)));
+                yield return Context._stage.CreateWall(Context._stage.GetCell(new Vector2Int(3, 2)));
+                yield return Context._stage.CreateWall(Context._stage.GetCell(new Vector2Int(5, 4)));
+                yield return Context._stage.CreateWall(Context._stage.GetCell(new Vector2Int(3, 3)));
 
                 Context._fullScreenBoard.gameObject.SetActive(false);
 
@@ -121,7 +120,7 @@ namespace App.Scenes.Game
             {
                 if (!_inputEnabled) yield break;
 
-                var targetCoord = Context._stage.Player.Cell.Coord.GetAdjacentCoord(direction);
+                var targetCoord = Context._stage.Player.Cell.GetAdjacentCoord(direction);
                 if (!Context._stage.IsMovableOrAttackableCell(targetCoord))
                 {
                     yield break;
@@ -184,7 +183,7 @@ namespace App.Scenes.Game
                     yield break;
                 }
 
-                var cell = Context._stage.GetCell(new GridCoord(result.FirstStepNode.X, result.FirstStepNode.Y));
+                var cell = Context._stage.GetCell(new Vector2Int(result.FirstStepNode.X, result.FirstStepNode.Y));
                 if (cell.Coord == Context._stage.Player.Cell.Coord)
                 {
                     yield return enemy.Attack(Context._stage.Player);
