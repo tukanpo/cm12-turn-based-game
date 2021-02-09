@@ -35,9 +35,10 @@ namespace App.Scenes.Game
         
         public IEnumerator Attack(Vector3 destination, float speed)
         {
-            transform.LookAt(destination);
+            Transform transform1;
+            (transform1 = transform).LookAt(destination);
 
-            var origin = transform.position;
+            var origin = transform1.position;
             var center = Vector3.Lerp(origin, destination, 0.5f);
 
             while (Vector3.Distance(transform.position, center) > float.Epsilon)
