@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace App.Scenes.Game
 {
-    public class GridCell : AStarGrid.INodeContent
+    public class GridCell : AStarGridPathfinding.INodeContent
     {
         public Vector2Int Coord { get; }
         
@@ -13,28 +13,16 @@ namespace App.Scenes.Game
         // NOTE: とりあえず
         public Unit Unit { get; set; }
 
-        public GridCell(Vector2Int coord)
+        public GridCell(int x, int y)
         {
-            Coord = coord;
+            Coord = new Vector2Int(x, y);
         }
-
+        
         public void CreateTile(Tile tilePrefab, Transform transform)
         {
             Tile = Tile.Spawn(tilePrefab, transform, Coord);
         }
 
-        #region Implementation of AStarGrid.INodeContent
-        
-        public bool IsMovable()
-        {
-            return Unit == null;
-        }
-
-        public int GetAdditionalCost()
-        {
-            return 0;
-        }
-        
         /// <summary>
         /// 隣接するグリッド座標を取得する
         /// </summary>
@@ -66,6 +54,18 @@ namespace App.Scenes.Game
             return new Vector2Int(x, y);
         }
         
+        #region Implementation of AStarGrid.INodeContent
+        
+        public bool IsMovable()
+        {
+            return Unit == null;
+        }
+
+        public int GetAdditionalCost()
+        {
+            return 0;
+        }
+
         #endregion
     }
 }

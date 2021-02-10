@@ -17,7 +17,7 @@ namespace App.Scenes.Game
 
         public List<Unit> StaticObjects { get; } = new List<Unit>();
 
-        GridCell[,] _cells;
+        Grid _grid;
         Tile _tilePrefab;
         StagePathfinding _pathfinding;
 
@@ -85,26 +85,20 @@ namespace App.Scenes.Game
         public IEnumerator CreateStage(int sizeX, int sizeY)
         {
             // 矩形のグリッドを生成してついでにタイルも生成
-            _cells = new GridCell[sizeX, sizeY];
-            for (var x = 0; x < sizeX; x++)
+            _grid = new Grid(sizeX, sizeY);
+            foreach (var cell in _grid)
             {
-                for (var y = 0; y < sizeY; y++)
-                {
-                    var cell = new GridCell(new Vector2Int(x, y));
-                    cell.CreateTile(_tilePrefab, transform);
-                    _cells[x, y] = cell;
-                }
-
+                cell.CreateTile(_tilePrefab, transform);
                 yield return null;
             }
 
             // 経路探索用ノード配列生成
-            _pathfinding.CreateGrid(_cells);
+            _pathfinding.CreatePathfindingGrid(_grid);
         }
 
         public bool IsCoordOutOfRange(Vector2Int coord)
         {
-            return coord.x < 0 || coord.x >= _cells.GetLength(0) || coord.y < 0 || coord.y >= _cells.GetLength(1);
+            return coord.x < 0 || coord.x >= _grid.SizeX || coord.y < 0 || coord.y >= _grid.SizeY;
         }
 
         public bool IsMovableOrAttackableCell(Vector2Int coord)
@@ -114,16 +108,16 @@ namespace App.Scenes.Game
                 return false;
             }
             
-            var unit = _cells[coord.x, coord.y].Unit;
+            var unit = _grid[coord.x, coord.y].Unit;
             return !(!ReferenceEquals(unit, null) && unit.UnitType == Constants.UnitType.StaticObject);
         }
         
         public GridCell GetCell(Vector2Int coord)
         {
-            return IsCoordOutOfRange(coord) ? null : _cells[coord.x, coord.y];
+            return IsCoordOutOfRange(coord) ? null : _grid[coord.x, coord.y];
         }
         
-        public AStarGrid.Result FindPath(GridCell start, GridCell goal)
+        public AStarGridPathfinding.Result FindPath(GridCell start, GridCell goal)
         {
             return _pathfinding.FindPath(start, goal);
         }
@@ -131,14 +125,11 @@ namespace App.Scenes.Game
         void InitializeGrid()
         {
             // 掃除する
-            if (_cells != null)
+            if (_grid != null)
             {
-                for (var x = 0; x < _cells.GetLength(0); x++)
+                foreach (var cell in _grid)
                 {
-                    for (var y = 0; y < _cells.GetLength(1); y++)
-                    {
-                        Destroy(_cells[x, y].Tile.gameObject);
-                    }
+                    Destroy(cell.Tile.gameObject);
                 }
             }
             

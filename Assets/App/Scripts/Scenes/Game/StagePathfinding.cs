@@ -7,27 +7,27 @@ namespace App.Scenes.Game
     /// </summary>
     public class StagePathfinding
     {
-        AStarGrid _aStarGrid;
-        AStarGrid.Node[,] _aStarNodes;
+        AStarGridPathfinding _pathfinding;
+        AStarGridPathfinding.Node[,] _aStarNodes;
         
-        public void CreateGrid(GridCell[,] cells)
+        public void CreatePathfindingGrid(Grid grid)
         {
-            _aStarGrid = new AStarGrid();
-            _aStarNodes = new AStarGrid.Node[cells.GetLength(0), cells.GetLength(1)];
+            _pathfinding = new AStarGridPathfinding();
+            _aStarNodes = new AStarGridPathfinding.Node[grid.SizeX, grid.SizeY];
             for (var x = 0; x < _aStarNodes.GetLength(0); x++)
             {
                 for (var y = 0; y < _aStarNodes.GetLength(1); y++)
                 {
-                    _aStarNodes[x, y] = new AStarGrid.Node(x, y, cells[x, y]);
+                    _aStarNodes[x, y] = new AStarGridPathfinding.Node(x, y, grid[x, y]);
                 }
             }
         }
 
-        public AStarGrid.Result FindPath(GridCell startCell, GridCell goalCell)
+        public AStarGridPathfinding.Result FindPath(GridCell startCell, GridCell goalCell)
         {
             var start = _aStarNodes[startCell.Coord.x, startCell.Coord.y];
             var goal = _aStarNodes[goalCell.Coord.x, goalCell.Coord.y];
-            return _aStarGrid.FindPath(_aStarNodes, start, goal);
+            return _pathfinding.FindPath(_aStarNodes, start, goal);
         }
     }
 }
