@@ -7,7 +7,7 @@ namespace App.Util
     /// <summary>
     /// A* アルゴリズムによるグリッド経路探索
     /// </summary>
-    public class AStarGrid
+    public class AStarGridPathfinding
     {
         public interface INodeContent
         {

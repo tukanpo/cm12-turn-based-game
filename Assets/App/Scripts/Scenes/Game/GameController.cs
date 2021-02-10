@@ -56,6 +56,7 @@ namespace App.Scenes.Game
                     Constants.CardinalDirection.S);
                 Context._stage.SetPlayerCamera(Context._vcam1);
 
+                // ここランダム化
                 yield return Context._stage.CreateEnemy(
                     Context._stage.GetCell(new Vector2Int(2, 2)), 
                     EnumUtil.Random<Constants.CardinalDirection>());
@@ -66,6 +67,7 @@ namespace App.Scenes.Game
                     Context._stage.GetCell(new Vector2Int(7, 7)),
                     EnumUtil.Random<Constants.CardinalDirection>());
 
+                // ここも
                 yield return Context._stage.CreateWall(Context._stage.GetCell(new Vector2Int(3, 2)));
                 yield return Context._stage.CreateWall(Context._stage.GetCell(new Vector2Int(5, 4)));
                 yield return Context._stage.CreateWall(Context._stage.GetCell(new Vector2Int(3, 3)));
