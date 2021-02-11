@@ -17,7 +17,7 @@ namespace App.Scenes.Game
 
         public List<Unit> StaticObjects { get; } = new List<Unit>();
 
-        Grid _grid;
+        StageGrid _stageGrid;
         Tile _tilePrefab;
         PlayerUnit _playerUnitPrefab;
         EnemyUnit _enemyUnitPrefab;
@@ -38,8 +38,8 @@ namespace App.Scenes.Game
         public IEnumerator CreateStage(int sizeX, int sizeY)
         {
             // 矩形のグリッドを生成してついでにタイルも生成
-            _grid = new Grid(sizeX, sizeY);
-            foreach (var cell in _grid)
+            _stageGrid = new StageGrid(sizeX, sizeY);
+            foreach (var cell in _stageGrid)
             {
                 cell.CreateTile(_tilePrefab, transform);
                 yield return null;
@@ -55,10 +55,10 @@ namespace App.Scenes.Game
             SpawnWall(GetCell(new Vector2Int(5, 4)));
 
             // 経路探索用ノード配列生成
-            _pathfinding.CreatePathfindingGrid(_grid);
+            _pathfinding.CreatePathfindingGrid(_stageGrid);
         }
         
-        public void SpawnPlayer(GridCell cell)
+        public void SpawnPlayer(StageCell cell)
         {
             Player = Unit.Spawn(
                 Constants.UnitType.Player,
@@ -71,7 +71,7 @@ namespace App.Scenes.Game
             Player.UpdateStatusView();
         }
 
-        public void SpawnEnemy(GridCell cell, Constants.CardinalDirection direction)
+        public void SpawnEnemy(StageCell cell, Constants.CardinalDirection direction)
         {
             var unit = Unit.Spawn(
                 Constants.UnitType.Enemy,
@@ -88,14 +88,14 @@ namespace App.Scenes.Game
         {
             for (var i = 0; i < 3; i++)
             {
-                var emptyCells = _grid.Where(x => x.Unit == null).ToArray();
+                var emptyCells = _stageGrid.Where(x => x.Unit == null).ToArray();
                 var index = Random.Range(0, emptyCells.Length);
                 SpawnEnemy(emptyCells[index], EnumUtil.Random<Constants.CardinalDirection>());
                 yield return null;
             }
         }
         
-        public void SpawnWall(GridCell cell)
+        public void SpawnWall(StageCell cell)
         {
             var unit = Unit.Spawn(
                 Constants.UnitType.StaticObject,
@@ -112,7 +112,7 @@ namespace App.Scenes.Game
 
         public bool IsCoordOutOfRange(Vector2Int coord)
         {
-            return coord.x < 0 || coord.x >= _grid.SizeX || coord.y < 0 || coord.y >= _grid.SizeY;
+            return coord.x < 0 || coord.x >= _stageGrid.SizeX || coord.y < 0 || coord.y >= _stageGrid.SizeY;
         }
 
         public bool IsMovableOrAttackableCell(Vector2Int coord)
@@ -122,16 +122,16 @@ namespace App.Scenes.Game
                 return false;
             }
             
-            var unit = _grid[coord.x, coord.y].Unit;
+            var unit = _stageGrid[coord.x, coord.y].Unit;
             return !(!ReferenceEquals(unit, null) && unit.UnitType == Constants.UnitType.StaticObject);
         }
         
-        public GridCell GetCell(Vector2Int coord)
+        public StageCell GetCell(Vector2Int coord)
         {
-            return IsCoordOutOfRange(coord) ? null : _grid[coord.x, coord.y];
+            return IsCoordOutOfRange(coord) ? null : _stageGrid[coord.x, coord.y];
         }
         
-        public AStarGridPathfinding.Result FindPath(GridCell start, GridCell goal)
+        public AStarGridPathfinding.Result FindPath(StageCell start, StageCell goal)
         {
             return _pathfinding.FindPath(start, goal);
         }
@@ -139,9 +139,9 @@ namespace App.Scenes.Game
         void InitializeGrid()
         {
             // 掃除する
-            if (_grid != null)
+            if (_stageGrid != null)
             {
-                foreach (var cell in _grid)
+                foreach (var cell in _stageGrid)
                 {
                     Destroy(cell.Tile.gameObject);
                 }

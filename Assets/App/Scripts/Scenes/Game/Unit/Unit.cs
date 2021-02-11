@@ -20,7 +20,7 @@ namespace App.Scenes.Game
         
         public UnitStatus UnitStatus { get; protected set; }
         
-        public GridCell Cell { get; protected set; }
+        public StageCell Cell { get; protected set; }
         
         public Constants.CardinalDirection Direction { get; protected set; }
 
@@ -30,7 +30,7 @@ namespace App.Scenes.Game
             Constants.UnitType unitType,
             T prefab,
             Transform parent,
-            GridCell cell,
+            StageCell cell,
             Constants.CardinalDirection direction) where T : Unit
         {
             var unit = Instantiate(prefab, cell.Tile.transform.position, prefab.transform.rotation);
@@ -45,7 +45,7 @@ namespace App.Scenes.Game
             return unit;
         }
         
-        public IEnumerator Move(GridCell destinationCell)
+        public IEnumerator Move(StageCell destinationCell)
         {
             // 移動前のセルから参照を外して移動先セルに参照をセットする
             Cell.Unit = null;

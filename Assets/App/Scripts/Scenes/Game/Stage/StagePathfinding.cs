@@ -10,7 +10,7 @@ namespace App.Scenes.Game
         AStarGridPathfinding _pathfinding;
         AStarGridPathfinding.Node[,] _aStarNodes;
         
-        public void CreatePathfindingGrid(Grid grid)
+        public void CreatePathfindingGrid(StageGrid grid)
         {
             _pathfinding = new AStarGridPathfinding();
             _aStarNodes = new AStarGridPathfinding.Node[grid.SizeX, grid.SizeY];
@@ -23,7 +23,7 @@ namespace App.Scenes.Game
             }
         }
 
-        public AStarGridPathfinding.Result FindPath(GridCell startCell, GridCell goalCell)
+        public AStarGridPathfinding.Result FindPath(StageCell startCell, StageCell goalCell)
         {
             var start = _aStarNodes[startCell.Coord.x, startCell.Coord.y];
             var goal = _aStarNodes[goalCell.Coord.x, goalCell.Coord.y];
