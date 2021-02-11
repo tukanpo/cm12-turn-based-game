@@ -28,6 +28,17 @@ namespace App.Scenes.Game
             InitializeGrid();
             InitializeUnits();
         }
+
+        public IEnumerator CreateEnemiesOnRandomTile()
+        {
+            for (var i = 0; i < 5; i++)
+            {
+                var emptyCells = _grid.Where(x => x.Unit == null).ToArray();
+                var index = Random.Range(0, emptyCells.Length);
+                yield return CreateEnemy(emptyCells[index],
+                    EnumUtil.Random<Constants.CardinalDirection>());
+            }
+        }
         
         public IEnumerator CreatePlayer(GridCell cell, Constants.CardinalDirection direction)
         {

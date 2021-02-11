@@ -49,29 +49,19 @@ namespace App.Scenes.Game
                 Context._fullScreenBoard.gameObject.SetActive(true);
                 Context._gameOverPanel.gameObject.SetActive(false);
                 
-                yield return Context._stage.CreateStage(11, 9);
+                yield return Context._stage.CreateStage(9, 9);
 
+                yield return Context._stage.CreateWall(Context._stage.GetCell(new Vector2Int(3, 2)));
+                yield return Context._stage.CreateWall(Context._stage.GetCell(new Vector2Int(5, 4)));
+                yield return Context._stage.CreateWall(Context._stage.GetCell(new Vector2Int(3, 3)));
+                
                 yield return Context._stage.CreatePlayer(
                     Context._stage.GetCell(new Vector2Int(4, 4)),
                     Constants.CardinalDirection.S);
                 Context._stage.SetPlayerCamera(Context._vcam1);
 
-                // ここランダム化
-                yield return Context._stage.CreateEnemy(
-                    Context._stage.GetCell(new Vector2Int(2, 2)), 
-                    EnumUtil.Random<Constants.CardinalDirection>());
-                yield return Context._stage.CreateEnemy(
-                    Context._stage.GetCell(new Vector2Int(1, 2)),
-                    EnumUtil.Random<Constants.CardinalDirection>());
-                yield return Context._stage.CreateEnemy(
-                    Context._stage.GetCell(new Vector2Int(7, 7)),
-                    EnumUtil.Random<Constants.CardinalDirection>());
-
-                // ここも
-                yield return Context._stage.CreateWall(Context._stage.GetCell(new Vector2Int(3, 2)));
-                yield return Context._stage.CreateWall(Context._stage.GetCell(new Vector2Int(5, 4)));
-                yield return Context._stage.CreateWall(Context._stage.GetCell(new Vector2Int(3, 3)));
-
+                yield return Context._stage.CreateEnemiesOnRandomTile();
+                
                 Context._fullScreenBoard.gameObject.SetActive(false);
 
                 StateMachine.Transit<PlayerTurnState>();
