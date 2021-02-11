@@ -7,10 +7,14 @@ namespace App.Scenes.Game
     // TODO: とりあえずの実装
     public class Unit : MonoBehaviour
     {
+        static int _latestId;
+        
         [SerializeField] UnitAnimation _unitAnimation;
         
         // TODO: Blink 用. 要らなくなったら削除
         [SerializeField] GameObject _body;
+        
+        public int Id { get; private set; }
         
         public Constants.UnitType UnitType { get; protected set; }
         
@@ -31,6 +35,7 @@ namespace App.Scenes.Game
         {
             var unit = Instantiate(prefab, cell.Tile.transform.position, prefab.transform.rotation);
             unit.transform.parent = parent;
+            unit.Id = _latestId++;
             unit.Cell = cell;
             unit.SetDirection(direction);
             unit.UnitType = unitType;

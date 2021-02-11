@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using App.Util;
 using Cinemachine;
 using UnityEngine;
@@ -51,16 +52,10 @@ namespace App.Scenes.Game
                 
                 yield return Context._stage.CreateStage(9, 9);
 
-                yield return Context._stage.CreateWall(Context._stage.GetCell(new Vector2Int(3, 2)));
-                yield return Context._stage.CreateWall(Context._stage.GetCell(new Vector2Int(5, 4)));
-                yield return Context._stage.CreateWall(Context._stage.GetCell(new Vector2Int(3, 3)));
-                
-                yield return Context._stage.CreatePlayer(
-                    Context._stage.GetCell(new Vector2Int(4, 4)),
-                    Constants.CardinalDirection.S);
+                Context._stage.SpawnPlayer(Context._stage.GetCell(new Vector2Int(4, 4)));
                 Context._stage.SetPlayerCamera(Context._vcam1);
 
-                yield return Context._stage.CreateEnemiesOnRandomTile();
+                yield return Context._stage.SpawnEnemiesOnRandomTile();
                 
                 Context._fullScreenBoard.gameObject.SetActive(false);
 
@@ -110,7 +105,6 @@ namespace App.Scenes.Game
             {
                 if (!_inputEnabled) yield break;
 
-                // TODO: コマンド化できそう
                 var targetCoord = Context._stage.Player.Cell.GetAdjacentCoord(direction);
                 if (!Context._stage.IsMovableOrAttackableCell(targetCoord))
                 {
@@ -137,19 +131,27 @@ namespace App.Scenes.Game
         {
             public override void OnEnter()
             {
+                if (!Context._stage.Enemies.Any())
+                {
+                    // 敵が居なくなったら生成
+                    Context.StartCoroutine(SpawnEnemies());
+                    return;
+                }
+                
                 Context.StartCoroutine(MoveEnemies());
+            }
+
+            IEnumerator SpawnEnemies()
+            {
+                yield return Context._stage.SpawnEnemiesOnRandomTile();
+                StateMachine.Transit<PlayerTurnState>();
             }
 
             IEnumerator MoveEnemies()
             {
-                foreach (var enemy in Context._stage.Enemies)
+                foreach (var kv in Context._stage.Enemies)
                 {
-                    if (ReferenceEquals(enemy, null))
-                    {
-                        continue;
-                    }
-                    
-                    yield return MoveEnemy(enemy);
+                    yield return MoveEnemy(kv.Value);
                     
                     if (Context._stage.Player.UnitStatus.Health <= 0)
                     {
