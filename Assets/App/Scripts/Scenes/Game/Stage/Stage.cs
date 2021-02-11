@@ -46,9 +46,13 @@ namespace App.Scenes.Game
             }
             
             // お試しで壁を適当に生成
+            SpawnWall(GetCell(new Vector2Int(1, 3)));
+            SpawnWall(GetCell(new Vector2Int(2, 3)));
             SpawnWall(GetCell(new Vector2Int(3, 2)));
-            SpawnWall(GetCell(new Vector2Int(5, 4)));
+            SpawnWall(GetCell(new Vector2Int(3, 1)));
+            SpawnWall(GetCell(new Vector2Int(3, 0)));
             SpawnWall(GetCell(new Vector2Int(3, 3)));
+            SpawnWall(GetCell(new Vector2Int(5, 4)));
 
             // 経路探索用ノード配列生成
             _pathfinding.CreatePathfindingGrid(_grid);
