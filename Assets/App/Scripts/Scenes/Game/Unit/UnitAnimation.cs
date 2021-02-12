@@ -20,13 +20,13 @@ namespace App.Scenes.Game
             }
         }
 
-        public IEnumerator MoveOverSeconds(Vector3 destination, float seconds)
+        public IEnumerator MoveOverSeconds(Vector3 destination, float durationSeconds)
         {
             float elapsedTime = 0;
-            while (elapsedTime < seconds)
+            while (elapsedTime < durationSeconds)
             {
                 var position = transform.position;
-                var time = Vector3.Distance(position, destination) / (seconds - elapsedTime) * Time.deltaTime;
+                var time = Vector3.Distance(position, destination) / (durationSeconds - elapsedTime) * Time.deltaTime;
                 transform.position = Vector3.MoveTowards(position, destination, time);
                 elapsedTime += Time.deltaTime;
                 yield return null;
@@ -38,6 +38,7 @@ namespace App.Scenes.Game
             Transform transform1;
             (transform1 = transform).LookAt(destination);
 
+            // それっぽくちょっと動かす
             var origin = transform1.position;
             var center = Vector3.Lerp(origin, destination, 0.5f);
 
@@ -64,6 +65,21 @@ namespace App.Scenes.Game
             }
             
             material.color = originalColor;
+        }
+        
+        public IEnumerator Rotate(Transform target, float durationSeconds)
+        {
+            var relativePos = target.position - transform.position;
+            relativePos.y = 0;
+        
+            var lookRotation = Quaternion.LookRotation(relativePos);
+            float elapsedTime = 0;
+            while (elapsedTime < durationSeconds)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, elapsedTime / durationSeconds);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
         }
     }
 }

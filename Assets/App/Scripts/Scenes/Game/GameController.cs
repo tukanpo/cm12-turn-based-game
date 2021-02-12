@@ -74,6 +74,8 @@ namespace App.Scenes.Game
 
             public override void OnUpdate()
             {
+                if (!_inputEnabled) return;
+                
                 if (Input.GetKey(KeyCode.W))
                 {
                     Context.StartCoroutine(MovePlayer(Constants.CardinalDirection.N));
