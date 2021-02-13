@@ -1,0 +1,23 @@
+@startuml class-overview
+class GameController << (C,orchid) >>
+class Stage << (C,orchid) >>
+class Tile << (C,orchid) >>
+class Unit << (C,orchid) >>
+GameController -- StateMachine
+'StateMachine *- "n" State
+StateMachine -- GameStartState
+StateMachine -- PlayerTurnState
+StateMachine -- EnemyTurnState
+StateMachine -- GameOverState
+GameController --> Stage
+Stage *--> "n" Unit
+Stage --> StageGrid
+Stage *--> "n" Tile
+StageGrid *--> "n" StageCell
+StageCell --> Tile
+StageCell --> Unit
+Stage --> StagePathfinding
+StagePathfinding --> AStarGridPathfinding
+AStarGridPathfinding *--> "n" AStarGridPathfinding.Node
+AStarGridPathfinding.Node --> StageCell
+@enduml

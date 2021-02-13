@@ -52,7 +52,7 @@ namespace App.Scenes.Game
             Cell = null;
             destinationCell.Unit = this;
 
-            yield return _unitAnimation.Rotate(destinationCell.Tile.transform, 0.5f);
+            yield return _unitAnimation.Rotate(destinationCell.Tile.transform, 0.4f);
 
             var speed = UnitType == Constants.UnitType.Player ? 3.5f : 6f;
             yield return _unitAnimation.MoveOverSpeed(destinationCell.Tile.transform.position, speed);
@@ -63,7 +63,7 @@ namespace App.Scenes.Game
 
         public IEnumerator Attack(Unit target)
         {
-            yield return _unitAnimation.Rotate(target.transform, 0.5f);
+            yield return _unitAnimation.Rotate(target.transform, 0.3f);
             yield return _unitAnimation.Attack(target.Cell.Tile.transform.position, 10f);
             yield return target.TakeDamage();
 
