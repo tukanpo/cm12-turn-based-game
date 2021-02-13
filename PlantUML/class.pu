@@ -1,4 +1,5 @@
 @startuml class-overview
+skinparam shadowing false
 class GameController << (C,orchid) >>
 class Stage << (C,orchid) >>
 class Tile << (C,orchid) >>
@@ -12,6 +13,7 @@ StateMachine -- GameOverState
 GameController --> Stage
 Stage *--> "n" Unit
 Stage --> StageGrid
+StageGrid --|> Array2d
 Stage *--> "n" Tile
 StageGrid *--> "n" StageCell
 StageCell --> Tile
