@@ -11,7 +11,7 @@ namespace App.Scenes.Game
     {
         public IEnumerator MoveOverSpeed(Vector3 destination, float speed)
         {
-            transform.LookAt(destination);
+            // transform.LookAt(destination);
 
             while (Vector3.Distance(transform.position, destination) > float.Epsilon)
             {

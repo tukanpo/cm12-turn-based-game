@@ -52,7 +52,7 @@ namespace App.Scenes.Game
             Cell = null;
             destinationCell.Unit = this;
 
-            yield return _unitAnimation.Rotate(destinationCell.Tile.transform, 0.4f);
+            StartCoroutine(_unitAnimation.Rotate(destinationCell.Tile.transform, 0.4f));
 
             var speed = UnitType == Constants.UnitType.Player ? 3.5f : 6f;
             yield return _unitAnimation.MoveOverSpeed(destinationCell.Tile.transform.position, speed);

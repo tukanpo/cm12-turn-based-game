@@ -361,7 +361,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitAnimation: {fileID: 6781088034740287540}
   _body: {fileID: 6540380118858003514}
-  _unitHealthBar: {fileID: 0}
 --- !u!114 &6781088034740287540
 MonoBehaviour:
   m_ObjectHideFlags: 0
