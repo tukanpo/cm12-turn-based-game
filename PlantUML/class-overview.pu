@@ -22,5 +22,5 @@ StageCell --> Unit
 Stage --> StagePathfinding
 StagePathfinding --> AStarGridPathfinding
 AStarGridPathfinding *--> "n" AStarGridPathfinding.Node
-AStarGridPathfinding.Node --> StageCell
+AStarGridPathfinding.Node --> INodeContent
 @enduml
