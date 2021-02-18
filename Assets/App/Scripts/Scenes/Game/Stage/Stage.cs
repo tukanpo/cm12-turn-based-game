@@ -13,6 +13,7 @@ namespace App.Scenes.Game
 
         public PlayerUnit Player { get; private set; }
 
+        // TODO: 外部からのアクセス不可にする！！！！
         public Dictionary<int, Unit> Enemies { get; } = new Dictionary<int, Unit>();
 
         public List<Unit> StaticObjects { get; } = new List<Unit>();
@@ -66,7 +67,8 @@ namespace App.Scenes.Game
                 transform, cell, Constants.CardinalDirection.S);
             Player.UnitStatus.MaxHealth = 3;
             Player.UnitStatus.Health = 3;
-            Player.OnUnitDied += OnUnitDied;
+            Player.UnitStatus.Damage = 2;
+            Player.OnDied += OnDied;
             Player.SetHealthBar(_playerHealthBar);
             Player.UpdateStatusView();
         }
@@ -77,9 +79,10 @@ namespace App.Scenes.Game
                 Constants.UnitType.Enemy,
                 _enemyUnitPrefab,
                 transform, cell, direction);
-            unit.UnitStatus.MaxHealth = 1;
-            unit.UnitStatus.Health = 1;
-            unit.OnUnitDied += OnUnitDied;
+            unit.UnitStatus.MaxHealth = 2;
+            unit.UnitStatus.Health = 2;
+            unit.UnitStatus.Damage = 1;
+            unit.OnDied += OnDied;
             unit.UpdateStatusView();
             Enemies.Add(unit.Id, unit);
         }
@@ -174,7 +177,7 @@ namespace App.Scenes.Game
             StaticObjects.Clear();
         }
         
-        void OnUnitDied(Unit unit)
+        void OnDied(Unit unit)
         {
             // 今の所は敵だけ削除する
             if (unit.UnitType != Constants.UnitType.Enemy)

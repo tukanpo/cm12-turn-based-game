@@ -10,7 +10,7 @@ namespace App.Scenes.Game
         
         public Tile Tile { get; private set; }
         
-        // NOTE: とりあえず
+        // TODO: UnitID にする？
         public Unit Unit { get; set; }
 
         public StageCell(int x, int y)

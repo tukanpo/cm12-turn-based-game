@@ -140,7 +140,7 @@ namespace App.Scenes.Game
                     return;
                 }
                 
-                Context.StartCoroutine(MoveEnemies());
+                Context.StartCoroutine(ExecuteEnemiesAction());
             }
 
             IEnumerator SpawnEnemies()
@@ -149,12 +149,12 @@ namespace App.Scenes.Game
                 StateMachine.Transit<PlayerTurnState>();
             }
 
-            IEnumerator MoveEnemies()
+            IEnumerator ExecuteEnemiesAction()
             {
                 foreach (var kv in Context._stage.Enemies)
                 {
-                    yield return MoveEnemy(kv.Value);
-                    
+                    yield return kv.Value.ThinkAndAction(Context._stage);
+
                     if (Context._stage.Player.UnitStatus.Health <= 0)
                     {
                         StateMachine.Transit<GameOverState>();
@@ -163,27 +163,6 @@ namespace App.Scenes.Game
                 }
 
                 StateMachine.Transit<PlayerTurnState>();
-            }
-
-            IEnumerator MoveEnemy(Unit enemy)
-            {
-                var result = Context._stage.FindPath(enemy.Cell, Context._stage.Player.Cell);
-                if (result == null)
-                {
-                    Debug.Log("Path not found!");
-                    StateMachine.Transit<PlayerTurnState>();
-                    yield break;
-                }
-
-                var cell = Context._stage.GetCell(new Vector2Int(result.FirstStepNode.X, result.FirstStepNode.Y));
-                if (cell.Coord == Context._stage.Player.Cell.Coord)
-                {
-                    yield return enemy.Attack(Context._stage.Player);
-                }
-                else
-                {
-                    yield return enemy.Move(cell);
-                }
             }
         }
 
