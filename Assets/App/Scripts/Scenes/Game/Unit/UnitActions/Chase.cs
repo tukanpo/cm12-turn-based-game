@@ -2,9 +2,9 @@ using System.Collections;
 using App.Util;
 using UnityEngine;
 
-namespace App.Scenes.Game
+namespace App.Scenes.Game.UnitActions
 {
-    public class ChaseUnitAction : IUnitAction
+    public class Chase : IUnitAction
     {
         StageCell _destinationCell;
         

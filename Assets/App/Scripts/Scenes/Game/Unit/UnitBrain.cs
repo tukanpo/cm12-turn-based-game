@@ -13,6 +13,6 @@ namespace App.Scenes.Game
             Unit = GetComponent<Unit>();
         }
 
-        public abstract IEnumerator ThinkAndAction(Stage stage);
+        public abstract IEnumerator GetAction(Stage stage);
     }
 }

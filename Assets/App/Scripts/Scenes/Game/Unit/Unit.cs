@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using App.Util;
 using UnityEngine;
 
 namespace App.Scenes.Game
@@ -8,8 +9,6 @@ namespace App.Scenes.Game
     {
         static int _latestId;
         
-        [SerializeField] UnitAnimation _unitAnimation;
-
         [SerializeField] UnitBrain _unitBrain;
         
         // TODO: Blink 用. 要らなくなったら削除 これさっさと消したい
@@ -34,7 +33,7 @@ namespace App.Scenes.Game
         
         #region 通知したいイベント
 
-        public event Action<Unit> OnDied;
+        public Action<Unit> OnDied { get; set; }
 
         #endregion
 
@@ -59,7 +58,6 @@ namespace App.Scenes.Game
             return unit;
         }
 
-        // TODO: EnemyUnit に移動
         public IEnumerator ThinkAndAction(Stage stage)
         {
             if (ReferenceEquals(_unitBrain, null))
@@ -68,54 +66,17 @@ namespace App.Scenes.Game
                 yield break;
             }
             
-            yield return _unitBrain.ThinkAndAction(stage);
+            yield return _unitBrain.GetAction(stage);
         }
         
         // TODO: Action としてまとめる
         // TODO: パラメータで渡ってきた Action を実行するメソッドを作る
-        // TODO: まずは Move を排除！
-        public IEnumerator Move(StageCell destinationCell)
-        {
-            // 移動前のセルから参照を外して移動先セルに参照をセットする
-            Cell.Unit = null;
-            Cell = null;
-            destinationCell.Unit = this;
-
-            StartCoroutine(_unitAnimation.Rotate(destinationCell.Tile.transform, 0.4f));
-
-            var speed = UnitType == Constants.UnitType.Player ? 3.5f : 6f;
-            yield return _unitAnimation.MoveOverSpeed(destinationCell.Tile.transform.position, speed);
-            yield return new WaitForSeconds(0.1f);
-            
-            Cell = destinationCell;
-        }
-
-        public IEnumerator Attack(Unit target)
-        {
-            yield return _unitAnimation.Rotate(target.transform, 0.3f);
-            yield return _unitAnimation.Attack(target.Cell.Tile.transform.position, 10f);
-            yield return target.TakeDamage(UnitStatus.Damage);
-
-            if (target.UnitStatus.Health <= 0)
-            {
-                OnDied?.Invoke(target);
-            }
-            
-            yield return new WaitForSeconds(0.3f);
-        }
-
-        public IEnumerator RangedAttack(Unit target)
-        {
-            yield return _unitAnimation.Rotate(target.transform, 0.3f);
-            
-            // TODO: 実装
-        }
 
         public IEnumerator TakeDamage(int damage)
         {
             UnitStatus.Health -= damage;
             UpdateStatusView();
-            yield return _unitAnimation.Blink(0.3f, _body.GetComponent<Renderer>().material);
+            yield return AnimationUtil.Blink(0.3f, _body.GetComponent<Renderer>().material);
         }
 
         public virtual void UpdateStatusView() {}

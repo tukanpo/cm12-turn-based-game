@@ -7,15 +7,16 @@ using UnityEngine;
 
 namespace App.Scenes.Game
 {
+    // TODO: Model に分離
     public class Stage : MonoBehaviour
     {
         [SerializeField] StatusBar _playerHealthBar;
 
         public PlayerUnit Player { get; private set; }
 
-        // TODO: 外部からのアクセス不可にする！！！！
-        public Dictionary<int, Unit> Enemies { get; } = new Dictionary<int, Unit>();
+        public Dictionary<int, EnemyUnit> Enemies { get; } = new Dictionary<int, EnemyUnit>();
 
+        // TODO: 専用クラスを Unit から派生して作る
         public List<Unit> StaticObjects { get; } = new List<Unit>();
 
         StageGrid _stageGrid;

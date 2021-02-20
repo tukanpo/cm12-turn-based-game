@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+using App.Scenes.Game.UnitActions;
 using App.Util;
 using Cinemachine;
 using UnityEngine;
@@ -67,6 +68,9 @@ namespace App.Scenes.Game
         {
             bool _inputEnabled = true;
 
+            readonly Chase _chase = new Chase();
+            readonly MeleeAttack _meleeAttack = new MeleeAttack();
+            
             public override void OnEnter()
             {
                 _inputEnabled = true;
@@ -118,11 +122,13 @@ namespace App.Scenes.Game
                 var cell = Context._stage.GetCell(targetCoord);
                 if (!ReferenceEquals(cell.Unit, null) && cell.Unit.UnitType == Constants.UnitType.Enemy)
                 {
-                    yield return Context._stage.Player.Attack(cell.Unit);
+                    _meleeAttack.SetParams(cell.Unit);
+                    yield return _meleeAttack.Execute(Context._stage.Player);
                 }
                 else
                 {
-                    yield return Context._stage.Player.Move(cell);
+                    _chase.SetParams(cell);
+                    yield return _chase.Execute(Context._stage.Player);
                 }
 
                 StateMachine.Transit<EnemyTurnState>();
