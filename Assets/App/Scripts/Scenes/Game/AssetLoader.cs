@@ -13,7 +13,7 @@ namespace App.Scenes.Game
             yield return LoadGameObject("PlayerUnit", callback);
         }
 
-        public static IEnumerator LoadEnemyUnitPrefab(Action<EnemyUnit> callback)
+        public static IEnumerator LoadEnemyUnitPrefab(Action<EnemyUnit01> callback)
         {
             yield return LoadGameObject("EnemyUnit", callback);
         }

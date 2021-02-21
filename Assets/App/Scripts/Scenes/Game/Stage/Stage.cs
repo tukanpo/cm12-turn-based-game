@@ -14,7 +14,7 @@ namespace App.Scenes.Game
 
         public PlayerUnit Player { get; private set; }
 
-        public Dictionary<int, EnemyUnit> Enemies { get; } = new Dictionary<int, EnemyUnit>();
+        public Dictionary<int, EnemyUnit01> Enemies { get; } = new Dictionary<int, EnemyUnit01>();
 
         // TODO: 専用クラスを Unit から派生して作る
         public List<Unit> StaticObjects { get; } = new List<Unit>();
@@ -22,7 +22,7 @@ namespace App.Scenes.Game
         StageGrid _stageGrid;
         Tile _tilePrefab;
         PlayerUnit _playerUnitPrefab;
-        EnemyUnit _enemyUnitPrefab;
+        EnemyUnit01 _enemyUnit01Prefab;
         Unit _wallPrefab;
         StagePathfinding _pathfinding;
 
@@ -30,7 +30,7 @@ namespace App.Scenes.Game
         {
             yield return AssetLoader.LoadFloorTilePrefab(prefab => _tilePrefab = prefab);
             yield return AssetLoader.LoadPlayerUnitPrefab(prefab => _playerUnitPrefab = prefab);
-            yield return AssetLoader.LoadEnemyUnitPrefab(prefab => _enemyUnitPrefab = prefab);
+            yield return AssetLoader.LoadEnemyUnitPrefab(prefab => _enemyUnit01Prefab = prefab);
             yield return AssetLoader.LoadWallPrefab(prefab => _wallPrefab = prefab);
 
             InitializeGrid();
@@ -78,7 +78,7 @@ namespace App.Scenes.Game
         {
             var unit = Unit.Spawn(
                 Constants.UnitType.Enemy,
-                _enemyUnitPrefab,
+                _enemyUnit01Prefab,
                 transform, cell, direction);
             unit.UnitStatus.MaxHealth = 2;
             unit.UnitStatus.Health = 2;

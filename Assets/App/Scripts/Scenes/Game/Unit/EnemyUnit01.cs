@@ -1,9 +1,10 @@
 using System;
+using App.Scenes.Game.UnitActions;
 using UnityEngine;
 
 namespace App.Scenes.Game
 {
-    public class EnemyUnit : Unit
+    public class EnemyUnit01 : Unit
     {
         [SerializeField] UnitStatusBar _statusBar;
 

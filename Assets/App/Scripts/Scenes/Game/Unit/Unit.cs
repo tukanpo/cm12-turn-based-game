@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using App.Util;
+using App.Scenes.Game.UnitActions;
 using UnityEngine;
 
 namespace App.Scenes.Game
@@ -8,12 +8,18 @@ namespace App.Scenes.Game
     public class Unit : MonoBehaviour
     {
         static int _latestId;
-        
+
         [SerializeField] UnitBrain _unitBrain;
+
+        // これ IF じゃないから駄目じゃない？
+        [SerializeField] TakeDamage _takeDamage;
         
         // TODO: Blink 用. 要らなくなったら削除 これさっさと消したい
         [SerializeField] GameObject _body;
 
+        public GameObject Body => _body;
+        
+        
         
         #region ユニットの状態
         
@@ -68,15 +74,11 @@ namespace App.Scenes.Game
             
             yield return _unitBrain.GetAction(stage);
         }
-        
-        // TODO: Action としてまとめる
-        // TODO: パラメータで渡ってきた Action を実行するメソッドを作る
 
         public IEnumerator TakeDamage(int damage)
         {
-            UnitStatus.Health -= damage;
-            UpdateStatusView();
-            yield return AnimationUtil.Blink(0.3f, _body.GetComponent<Renderer>().material);
+            _takeDamage.SetParams(damage);
+            yield return _takeDamage.Execute(this);
         }
 
         public virtual void UpdateStatusView() {}

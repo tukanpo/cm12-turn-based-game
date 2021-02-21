@@ -4,11 +4,13 @@ using UnityEngine;
 
 namespace App.Scenes.Game
 {
-    public class EnemyBrain : UnitBrain
+    public class EnemyBrain01 : UnitBrain
     {
         readonly Chase _chase = new Chase();
         readonly MeleeAttack _meleeAttack = new MeleeAttack();
 
+        // TODO: 実行するのではなく結果を返すようにする？
+        // TODO: じゃぁ実行はどこがやる？ Unit？
         public override IEnumerator GetAction(Stage stage)
         {
             var result = stage.FindPath(Unit.Cell, stage.Player.Cell);
